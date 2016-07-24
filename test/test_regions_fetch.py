@@ -1,6 +1,8 @@
 import unittest
 import app.regions.regions_fetch.handler as handler
+import app.db.setup as db
 
+db.init_graph("test")
 
 class RegionsFetchTest(unittest.TestCase):
 
