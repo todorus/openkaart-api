@@ -22,7 +22,9 @@ def createAll(graph, databaseName, node_definitions):
 
     transaction.commit()
 
-def search(graph, databaseName, query=None, limit=10, skip=0):
+def search(graph, databaseName, query=None, limit=10, page=0):
+    skip = page * limit
+
     result = None
     if query is None:
         result = graph.run(
@@ -59,4 +61,4 @@ def readCursor(cursor):
             values["geometry"] = json.loads(values["geometry"])
         data.append(values)
 
-    return {"data": data}
+    return data
