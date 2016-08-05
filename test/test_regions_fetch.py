@@ -9,11 +9,7 @@ graph = db.init_graph("test")
 databaseName = "test_database"
 
 
-class FetchAllRegions(unittest.TestCase):
-
-    event = {
-        "query": "nij"
-    }
+class FetchRegions(unittest.TestCase):
 
     def setUp(self):
         utils.wipe_db(graph, databaseName)
@@ -32,8 +28,11 @@ class FetchAllRegions(unittest.TestCase):
         ]
         region.createAll(graph, databaseName, definitions)
 
-    def test_hello_world(self):
-        result = handler.handler(self.event, None)
+    def without_parameters(self):
+        event = {
+            "query": "nij"
+        }
+        result = handler.handler(event, None)
 
         expected = {
           "pages": {
