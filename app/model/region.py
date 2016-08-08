@@ -35,10 +35,14 @@ def createAll(graph, databaseName, node_definitions):
     transaction.commit()
 
 
-def exists(graph, databaseName, query):
+def exists(graph, databaseName, definition):
+    return len(match(graph, databaseName, definition)) > 0
+
+
+def match(graph, databaseName, definition):
     selector = NodeSelector(graph)
-    result = list(selector.select("Region", databaseName, **query))
-    return len(result) > 0
+    result = list(selector.select("Region", databaseName, **definition))
+    return result
 
 
 def search(graph, databaseName, query=None, limit=10, page=0):

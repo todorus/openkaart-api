@@ -1,6 +1,7 @@
 import importers.municipalities as municipalities
 import importers.provinces as provinces
 import importers.postal_areas as postal_areas
+import importers.relations as relations
 from app.db import setup as db
 from app.model import region
 
@@ -12,7 +13,8 @@ def wipe_db(graph, databaseName):
     graph.data("MATCH (n:"+databaseName+") OPTIONAL MATCH (n:"+databaseName+")-[r]->(m) DELETE n,m,r")
 
 
-wipe_db(graph, databaseName)
-# municipalities.execute(graph, databaseName, "data/gemeentes.geo.json")
-# provinces.execute(graph, databaseName, "data/provincies.geo.json")
+# wipe_db(graph, databaseName)
+municipalities.execute(graph, databaseName, "data/gemeentes.geo.json")
+provinces.execute(graph, databaseName, "data/provincies.geo.json")
 postal_areas.execute(graph, databaseName, "data/postcodes.geo.json")
+relations.execute(graph, databaseName, "data/postcode-gemeente-tabel.json")
