@@ -35,13 +35,7 @@ def createAll(graph, databaseName, node_definitions):
     transaction.commit()
 
 
-def exists(graph, databaseName, definition):
-    query = {}
-    if 'name' in definition:
-        query["name"] = definition["name"]
-    if 'code' in definition:
-        query["code"] = definition["code"]
-
+def exists(graph, databaseName, query):
     selector = NodeSelector(graph)
     result = list(selector.select("Region", databaseName, **query))
     return len(result) > 0

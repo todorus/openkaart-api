@@ -9,9 +9,11 @@ def execute(graph, databaseName, fileName):
         properties = {
             "name": item["properties"]["gemeentena"],
             "code": item["properties"]["code"],
+            "type": region.MUNICIPALITY,
             "geometry": item["geometry"],
         }
 
-        if not region.exists(graph, databaseName, properties):
+        query = {"name": properties["name"], "type": properties["type"], "code": properties["code"]}
+        if not region.exists(graph, databaseName, query):
             region.create(graph, databaseName, properties)
             print properties["name"]
