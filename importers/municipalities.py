@@ -1,5 +1,4 @@
 import json
-from app.db import setup as db
 from app.model import region
 
 
