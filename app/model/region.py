@@ -1,5 +1,5 @@
 from enum import Enum
-from py2neo import Graph, Node, Relationship
+from py2neo import Graph, Node, Relationship, NodeSelector
 import json
 
 
@@ -10,17 +10,40 @@ PROVINCE = "Province"
 CARE = "Care"
 
 
+def new(graph, databaseName, definition):
+    # py2neo does not support dictionary properties, so convert it to json
+    if 'geometry' in definition:
+        definition["geometry"] = json.dumps(definition["geometry"])
+    node = Node("Region", databaseName, **definition)
+    return node
+
+
+def create(graph, databaseName, definition):
+    # py2neo does not support dictionary properties, so convert it to json
+    if 'geometry' in definition:
+        definition["geometry"] = json.dumps(definition["geometry"])
+    node = new(graph, databaseName, definition)
+    return graph.create(node)
+
+
 def createAll(graph, databaseName, node_definitions):
     transaction = graph.begin()
     for definition in node_definitions:
-        # py2neo does not support dictionary properties, so convert it to json
-        if 'geometry' in definition:
-            definition["geometry"] = json.dumps(definition["geometry"])
-
-        node = Node("Region", databaseName, **definition)
+        node = new(graph, databaseName, definition)
         transaction.create(node)
 
     transaction.commit()
+
+
+def exists(graph, databaseName, definition):
+    return len(match(graph, databaseName, definition)) > 0
+
+
+def match(graph, databaseName, definition):
+    selector = NodeSelector(graph)
+    result = list(selector.select("Region", databaseName, **definition))
+    return result
+
 
 def search(graph, databaseName, query=None, limit=10, page=0):
     skip = page * limit

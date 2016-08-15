@@ -28,4 +28,4 @@ def handler(event, context):
     cursor = region.search(graph, databaseName, **event)
     data = region.readCursor(cursor)
     pages = pagination.paginate(len(data), **event)
-    return {"data": data, "pages":pages}
+    return {"data": data, "pages": pages}
