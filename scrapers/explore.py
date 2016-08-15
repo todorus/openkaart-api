@@ -5,18 +5,24 @@ wfs11 = WebFeatureService(url='https://geodata.nationaalgeoregister.nl/cbsgebied
 # print "title\n"
 # print wfs11.identification.title
 
+print "options\n======"
+print wfs11['cbsgebiedsindelingen:cbs_gemeente_2016_gegeneraliseerd'].crsOptions
+
+
 print "operations\n=========="
 for operation in wfs11.operations:
     print operation.name
 print"\n\n\n\n\n"
+#
+# print "contents\n========"
+# contents = list(wfs11.contents)
+# contents.sort()
+# for content in contents:
+#     print content
 
-print "contents\n========"
-contents = list(wfs11.contents)
-contents.sort()
-for content in contents:
-    print content
+response = wfs11.describefeaturetype('cbsgebiedsindelingen:cbs_gemeente_2016_gegeneraliseerd')
 # response = wfs11.getfeature(typename='cbsgebiedsindelingen:cbs_gemeente_2016_gegeneraliseerd', outputFormat='json')
-# out = open('response', 'wb')
-# out.write(bytes(response.read()))
-# out.close()
-# print "saved response"
+out = open('response', 'wb')
+out.write(bytes(response.read()))
+out.close()
+print "saved response"
