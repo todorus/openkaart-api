@@ -14,7 +14,7 @@ def wipe_db(graph, databaseName):
 
 
 # wipe_db(graph, databaseName)
-municipalities.execute(graph, databaseName, "data/gemeentes.geo.json")
-provinces.execute(graph, databaseName, "data/provincies.geo.json")
-postal_areas.execute(graph, databaseName, "data/postcodes.geo.json")
+# municipalities.execute(graph, databaseName, "data/gemeentes.geo.json")
+# provinces.execute(graph, databaseName, "data/provincies.geo.json")
+# postal_areas.execute(graph, databaseName, "data/postcodes.geo.json")
 relations.execute(graph, databaseName, "data/postcode-gemeente-tabel.json")

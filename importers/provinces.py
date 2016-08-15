@@ -6,7 +6,7 @@ def execute(graph, databaseName, fileName):
     data = json.load(open(fileName))
     for item in data:
         properties = {
-            "name": item["properties"]["Provincien"].replace("-", " "),
+            "name": item["properties"]["Provincien"],
             "type": region.PROVINCE,
             "geometry": item["geometry"],
         }
