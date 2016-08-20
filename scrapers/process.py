@@ -1,7 +1,5 @@
-"""
-Run with Python 3
-"""
 import json
+import geojson
 import string
 import psycopg2
 from shapely.geometry import shape
@@ -14,7 +12,7 @@ cur = conn.cursor()
 
 print "municipalities"
 cur.execute("DROP TABLE IF EXISTS municipalities")
-cur.execute('CREATE TABLE municipalities (id serial PRIMARY KEY, code integer, name varchar, "geometry" geometry(Polygon))')
+cur.execute('CREATE TABLE municipalities (id serial PRIMARY KEY, code integer, name varchar, "geometry" geometry)')
 
 data = json.load(open("municipalities.geo.json"))
 features = data["features"]
@@ -22,8 +20,15 @@ for feature in features:
     properties = feature["properties"]
     code = int(properties["statcode"][2:])
     name = properties["statnaam"]
-    data = (code, name)
-    cur.execute("INSERT INTO municipalities (code, name) VALUES (%s, %s)", data)
+
+    geometry_dump = json.dumps(feature["geometry"])
+    geometry_geojson = geojson.loads(geometry_dump)
+    geometry_wkt = shape(geometry_geojson).wkt
+
+    data = (code, name, geometry_wkt)
+
+    print "inserting %s: %s" % (name, geometry_dump)
+    cur.execute("INSERT INTO municipalities (code, name, geometry) VALUES (%s, %s, ST_GeomFromText(%s))", data)
     print "inserted %s, %s" % (code, name)
 conn.commit()
 
