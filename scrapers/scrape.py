@@ -1,6 +1,11 @@
 from urllib import urlopen
 import json
 from math import floor
+import time
+import datetime
+
+def days_hours_minutes(timeDelta):
+    return timeDelta.days, timeDelta.seconds//3600, (timeDelta.seconds//60)%60
 
 # https://geodata.nationaalgeoregister.nl/inspireadressen/wfs?version=2.0.0&request=getFeature&typeName=inspireadressen:inspireadressen&outputFormat=json&srsName=urn:x-ogc:def:crs:EPSG:4326&count=10&startIndex=0&sortBy=gid
 def scrape(serverBaseUrl, typeName, fileName, startIndex, total, sortBy):
@@ -11,6 +16,7 @@ def scrape(serverBaseUrl, typeName, fileName, startIndex, total, sortBy):
     else:
         url = '{}?SERVICE=WFS&request=getFeature&typeName={}&outputFormat=json&srsName=urn:x-ogc:def:crs:EPSG:4326&count={}&startIndex={}&sortBy={}'.format(serverBaseUrl, typeName, limit, startIndex, sortBy)
 
+    startTime = time.time()
     print 'fetching: %s' % url
     response = urlopen(url)
 
@@ -28,8 +34,15 @@ def scrape(serverBaseUrl, typeName, fileName, startIndex, total, sortBy):
 
     lastIndex = startIndex + limit
 
+
     if lastIndex < total:
-        print "moving to %s (%d/%d)" % (typeName, index+1, floor(total / limit))
+        passedTime = time.time() - startTime
+        totalIndex = floor(total / limit)
+        indexesLeft = totalIndex - index
+        timeDelta = datetime.timedelta(seconds=indexesLeft * passedTime)
+        timeString = ", estimated time remaining: %s" % timeDelta
+
+        print "moving to %s (%d/%d) %s" % (typeName, index+1, totalIndex, timeString)
         scrape(serverBaseUrl, typeName, fileName, startIndex+limit, total, sortBy)
 
 
