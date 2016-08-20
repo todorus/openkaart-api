@@ -1,6 +1,5 @@
 import json
 import geojson
-import string
 import psycopg2
 from shapely.geometry import shape
 
