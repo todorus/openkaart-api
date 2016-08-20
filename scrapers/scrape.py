@@ -23,5 +23,3 @@ scrape(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_jeugdzorgregio_2016_gegeneralise
 
 bagAddressWFS = 'https://geodata.nationaalgeoregister.nl/inspireadressen/wfs'
 scrape(bagAddressWFS, 'inspireadressen:inspireadressen', 'adressen.geo.json')
-
-# Postgres and PostGis are required for the next steps
