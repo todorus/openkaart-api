@@ -27,22 +27,20 @@ for feature in features:
 
     data = (code, name, geometry_wkt)
 
-    print "inserting %s: %s" % (name, geometry_dump)
     cur.execute("INSERT INTO municipalities (code, name, geometry) VALUES (%s, %s, ST_GeomFromText(%s))", data)
-    print "inserted %s, %s" % (code, name)
+    print "inserted municipality %s, %s" % (code, name)
 conn.commit()
 
-# print "postal codes"
-# cur.execute("DROP TABLE IF EXISTS postal_codes")
-# cur.execute("CREATE TABLE postal_codes (id serial PRIMARY KEY, name varchar)")
-#
-# for number in range(0,10000):
-#     for first in string.uppercase[:26]:
-#         for second in string.uppercase[:26]:
-#             name = str(number).zfill(4) + first + second
-#             data = (name,)
-#             cur.execute("INSERT INTO postal_codes (name) VALUES (%s)", data)
-#             print "inserted %s" % (name)
+print "postal codes"
+cur.execute("DROP TABLE IF EXISTS postal_codes")
+cur.execute("CREATE TABLE postal_codes (id serial PRIMARY KEY, name varchar)")
+
+for number in range(0,10000):
+    name = str(number).zfill(4)
+    data = (name,)
+    cur.execute("INSERT INTO postal_codes (name) VALUES (%s)", data)
+    print "inserted postal area %s" % (name)
+conn.commit()
 
 
 cur.close()
