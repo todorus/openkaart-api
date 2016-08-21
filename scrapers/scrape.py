@@ -40,20 +40,33 @@ def start_scrape(serverBaseUrl, typeName, fileName, sortBy):
     limit = 1000
     totalPages = 1
     total = 0
+    attempt = 1
+    maxAttempts = 3
 
     while page < totalPages:
-        page, total, passedTime = scrape(serverBaseUrl, typeName, fileName, page, limit, total, sortBy)
+        try:
+            page, total, passedTime = scrape(serverBaseUrl, typeName, fileName, page, limit, total, sortBy)
 
-        if page == 0:
-            totalPages = ceil(total / limit)
+            if page == 0:
+                totalPages = ceil(total / limit)
 
-        if page < totalPages:
-            indexesLeft = totalPages - page
-            timeDelta = datetime.timedelta(seconds=indexesLeft * passedTime)
-            timeString = ", estimated time remaining: %s" % timeDelta
+            if page < totalPages:
+                indexesLeft = totalPages - page
+                timeDelta = datetime.timedelta(seconds=indexesLeft * passedTime)
+                timeString = ", estimated time remaining: %s" % timeDelta
 
-            page += 1
-            print "moving to %s (%d/%d) %s" % (typeName, page, totalPages, timeString)
+                page += 1
+                attempt = 1
+                print "moving to %s (%d/%d) %s" % (typeName, page, totalPages, timeString)
+
+        except IOError, e:
+            print "attempt %d resulted in an IOError" % attempt
+            attempt += 1
+            if attempt <= maxAttempts:
+                print "retrying"
+            else:
+                print "more than %d failed attempts, aborting" % maxAttempts
+                break
 
 
 cbsRegionsWFS = 'https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/ows'
