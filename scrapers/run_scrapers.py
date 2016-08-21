@@ -1,7 +1,12 @@
 from scraper import WFSScraper
+from municipalities import MunicipalityFileScraper
 
 cbsRegionsWFS = 'https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/ows'
-WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_provincie_2016_gegeneraliseerd', '../data/provinces.geo.json', None).start()
+
+municipalityWFSScraper = WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_provincie_2016_gegeneraliseerd', '../data/provinces.geo.json', None)
+municipalityWFSScraper.start()
+MunicipalityFileScraper(municipalityWFSScraper.fileName).start()
+
 WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_gemeente_2016_gegeneraliseerd', '../data/municipalities.geo.json', None).start()
 WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_wijk_2016_gegeneraliseerd', '../data/district.geo.json', None).start()
 WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_buurt_2016_gegeneraliseerd', '../data/neighborhoods.geo.json', None).start()

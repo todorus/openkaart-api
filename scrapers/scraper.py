@@ -3,6 +3,8 @@ import json
 from math import ceil
 import time
 import datetime
+import os.path
+import psycopg2
 
 
 def days_hours_minutes(timeDelta):
@@ -29,7 +31,7 @@ class Scraper(object):
 
                 page += 1
                 attempt = 1
-                print "moving to %s %d" % (self.typeName, page)
+                print "moving to %d" % (page,)
 
             except IOError, e:
                 print "attempt %d resulted in an IOError" % attempt
@@ -39,6 +41,7 @@ class Scraper(object):
                 else:
                     print "more than %d failed attempts, aborting" % self.maxAttempts
                     break
+        self.close()
 
     def scrape(self, page, limit):
 
@@ -56,6 +59,9 @@ class Scraper(object):
     def write(self, json_string, page):
         raise NotImplementedError("Subclasses should implement this!")
 
+    def close(self):
+        pass
+
 
 class WFSScraper(Scraper):
     def __init__(self, basePath, typeName, fileName, sortBy):
@@ -64,7 +70,7 @@ class WFSScraper(Scraper):
         self.typeName = typeName
         self.fileName = fileName
         self.sortBy = sortBy
-        self.total = 0
+        self.total = -1
 
     def fetch(self, page, limit):
         startIndex = page * limit
@@ -89,8 +95,37 @@ class WFSScraper(Scraper):
         data = json.loads(json_string)
         self.total = data["totalFeatures"]
 
-    def hasNext(self, page):
-        if self.total == 0:
+    def hasNext(self, currentPage):
+        if self.total == -1:
             return True
         else:
-            return page < ceil(self.total / self.limit)
+            return currentPage < ceil(self.total / self.limit)
+
+
+class FileScraper(Scraper):
+    def __init__(self, basePath):
+        super(FileScraper, self).__init__()
+        self.basePath = basePath
+
+    def start(self):
+        self.conn = psycopg2.connect("dbname=openkaart_development user=todorus")
+        self.cur = self.conn.cursor()
+        super(FileScraper, self).start()
+
+    def fetch(self, page, limit):
+        fileName = "%s.%d" % (self.basePath , page)
+
+        print 'loading: %s' % fileName
+        content = open(fileName)
+        return content
+
+    def hasNext(self, currentPage):
+        fileName = "%s.%d" % (self.basePath, currentPage)
+        return os.path.isfile(fileName)
+
+    def write(self, json_string, page):
+        raise NotImplementedError("Subclasses should implement this!")
+
+    def close(self):
+        self.cur.close()
+        self.conn.close()
