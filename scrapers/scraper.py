@@ -9,58 +9,62 @@ def days_hours_minutes(timeDelta):
     return timeDelta.days, timeDelta.seconds//3600, (timeDelta.seconds//60)%60
 
 
-class Scraper():
+class Scraper(object):
 
-    def __init__(self, basePath, typeName, fileName, sortBy):
-        self.basePath = basePath
-        self.typeName = typeName
-        self.fileName = fileName
-        self.sortBy = sortBy
-        return
+    def __init__(self):
+        self.limit = 1000
+        self.maxAttempt = 3
 
     def start(self):
         page = 0
-        limit = 1000
-        totalPages = 1
-        total = 0
         attempt = 1
-        maxAttempts = 3
 
-        while page < totalPages:
+        while self.hasNext(page):
             try:
-                total, passedTime = self.scrape(page, limit, total)
+                startTime = time.time()
+                self.scrape(page, self.limit)
+                passedTime = time.time() - startTime
+                timeDelta = datetime.timedelta(passedTime)
+                print "duration: %s" % timeDelta
 
-                if page == 0:
-                    totalPages = ceil(total / limit)
-
-                if page < totalPages:
-                    indexesLeft = totalPages - page
-                    timeDelta = datetime.timedelta(seconds=indexesLeft * passedTime)
-                    timeString = ", estimated time remaining: %s" % timeDelta
-
-                    page += 1
-                    attempt = 1
-                    print "moving to %s (%d/%d) %s" % (self.typeName, page, totalPages, timeString)
+                page += 1
+                attempt = 1
+                print "moving to %s %d" % (self.typeName, page)
 
             except IOError, e:
                 print "attempt %d resulted in an IOError" % attempt
                 attempt += 1
-                if attempt <= maxAttempts:
+                if attempt <= self.maxAttempts:
                     print "retrying"
                 else:
-                    print "more than %d failed attempts, aborting" % maxAttempts
+                    print "more than %d failed attempts, aborting" % self.maxAttempts
                     break
 
-    def scrape(self, page, limit, total):
-
-        startTime = time.time()
+    def scrape(self, page, limit):
 
         content = self.fetch(page, limit)
-        total = self.write(content, page)
+        self.write(content, page)
 
-        passedTime = time.time() - startTime
+        return
 
-        return total, passedTime
+    def hasNext(page):
+        raise NotImplementedError("Subclasses should implement this!")
+
+    def fetch(self, page, limit):
+        raise NotImplementedError("Subclasses should implement this!")
+
+    def write(self, json_string, page):
+        raise NotImplementedError("Subclasses should implement this!")
+
+
+class WFSScraper(Scraper):
+    def __init__(self, basePath, typeName, fileName, sortBy):
+        super(WFSScraper, self).__init__()
+        self.basePath = basePath
+        self.typeName = typeName
+        self.fileName = fileName
+        self.sortBy = sortBy
+        self.total = 0
 
     def fetch(self, page, limit):
         startIndex = page * limit
@@ -74,7 +78,6 @@ class Scraper():
         content = response.read()
         return content
 
-
     def write(self, json_string, page):
         indexedFilename = "%s.%d" % (self.fileName, page)
 
@@ -84,5 +87,10 @@ class Scraper():
         out.close()
 
         data = json.loads(json_string)
-        total = data["totalFeatures"]
-        return total
+        self.total = data["totalFeatures"]
+
+    def hasNext(self, page):
+        if self.total == 0:
+            return True
+        else:
+            return page < ceil(self.total / self.limit)
