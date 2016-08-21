@@ -1,13 +1,10 @@
 from scraper import WFSScraper
-from municipalities import MunicipalityFileScraper
+from municipalities import MunicipalityWFSScraper
+from relate_areas import PostalCodesFileScraper
 
 cbsRegionsWFS = 'https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/ows'
-
-municipalityWFSScraper = WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_provincie_2016_gegeneraliseerd', '../data/provinces.geo.json', None)
-municipalityWFSScraper.start()
-MunicipalityFileScraper(municipalityWFSScraper.fileName).start()
-
-WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_gemeente_2016_gegeneraliseerd', '../data/municipalities.geo.json', None).start()
+WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_provincie_2016_gegeneraliseerd', '../data/provinces.geo.json', None).start()
+MunicipalityWFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_gemeente_2016_gegeneraliseerd', '../data/municipalities.geo.json', None).start()
 WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_wijk_2016_gegeneraliseerd', '../data/district.geo.json', None).start()
 WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_buurt_2016_gegeneraliseerd', '../data/neighborhoods.geo.json', None).start()
 WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_ggdregio_2016_gegeneraliseerd', '../data/ggd.geo.json', None).start()
@@ -15,3 +12,5 @@ WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_jeugdzorgregio_2016_gegenera
 
 bagAddressWFS = 'https://geodata.nationaalgeoregister.nl/inspireadressen/wfs'
 WFSScraper(bagAddressWFS, 'inspireadressen:inspireadressen', '../data/adressen.geo.json', "gid").start()
+
+PostalCodesFileScraper('../data/adressen.geo.json').start()

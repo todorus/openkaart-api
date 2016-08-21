@@ -15,9 +15,18 @@ class Scraper(object):
 
     def __init__(self):
         self.limit = 1000
-        self.maxAttempt = 3
+        self.maxAttempts = 3
 
     def start(self):
+        self.before()
+        self.run()
+        self.close()
+
+    def before(self):
+        self.conn = psycopg2.connect("dbname=openkaart_development user=todorus")
+        self.cur = self.conn.cursor()
+
+    def run(self):
         page = 0
         attempt = 1
 
@@ -41,7 +50,6 @@ class Scraper(object):
                 else:
                     print "more than %d failed attempts, aborting" % self.maxAttempts
                     break
-        self.close()
 
     def scrape(self, page, limit):
 
@@ -60,7 +68,8 @@ class Scraper(object):
         raise NotImplementedError("Subclasses should implement this!")
 
     def close(self):
-        pass
+        self.cur.close()
+        self.conn.close()
 
 
 class WFSScraper(Scraper):
@@ -92,8 +101,13 @@ class WFSScraper(Scraper):
         out.write(bytes(json_string))
         out.close()
 
-        data = json.loads(json_string)
-        self.total = data["totalFeatures"]
+        if self.total == -1:
+            data = json.loads(json_string)
+            self.total = data["totalFeatures"]
+        self.writeToDb(json_string)
+
+    def writeToDb(self, json_string):
+        print "WARNING: writeToDb not implemented"
 
     def hasNext(self, currentPage):
         if self.total == -1:
@@ -107,16 +121,11 @@ class FileScraper(Scraper):
         super(FileScraper, self).__init__()
         self.basePath = basePath
 
-    def start(self):
-        self.conn = psycopg2.connect("dbname=openkaart_development user=todorus")
-        self.cur = self.conn.cursor()
-        super(FileScraper, self).start()
-
     def fetch(self, page, limit):
         fileName = "%s.%d" % (self.basePath , page)
 
         print 'loading: %s' % fileName
-        content = open(fileName)
+        content = open(fileName).read()
         return content
 
     def hasNext(self, currentPage):
@@ -125,7 +134,3 @@ class FileScraper(Scraper):
 
     def write(self, json_string, page):
         raise NotImplementedError("Subclasses should implement this!")
-
-    def close(self):
-        self.cur.close()
-        self.conn.close()
