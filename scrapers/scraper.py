@@ -16,6 +16,9 @@ class Scraper(object):
     def __init__(self):
         self.limit = 1000
         self.maxAttempts = 3
+        self.timeMeasurements = []
+        self.timeSlot = -1
+        self.timeAverage = 0
 
     def start(self):
         self.before()
@@ -35,8 +38,8 @@ class Scraper(object):
                 startTime = time.time()
                 self.scrape(page, self.limit)
                 passedTime = time.time() - startTime
-                timeDelta = datetime.timedelta(seconds=passedTime)
-                print "duration: %s" % timeDelta
+                self.addTimeMeasurement(passedTime)
+                self.printProgress(page, passedTime)
 
                 page += 1
                 attempt = 1
@@ -71,6 +74,21 @@ class Scraper(object):
         self.cur.close()
         self.conn.close()
 
+    def addTimeMeasurement(self, seconds):
+        self.timeSlot = (self.timeSlot + 1) % 5
+        if len(self.timeMeasurements) > self.timeSlot:
+            self.timeMeasurements[self.timeSlot] = seconds
+        else:
+            self.timeMeasurements.append(seconds)
+        totalTime = 0
+        for measurement in self.timeMeasurements:
+            totalTime += measurement
+        self.timeAverage = totalTime / len(self.timeMeasurements)
+
+    def printProgress(self, page, passedTime):
+        timeDelta = datetime.timedelta(seconds=passedTime)
+        print "duration: %s" % timeDelta
+
 
 class WFSScraper(Scraper):
     def __init__(self, basePath, typeName, fileName, sortBy):
@@ -79,7 +97,7 @@ class WFSScraper(Scraper):
         self.typeName = typeName
         self.fileName = fileName
         self.sortBy = sortBy
-        self.total = -1
+        self.totalPages = -1
 
     def fetch(self, page, limit):
         startIndex = page * limit
@@ -101,19 +119,24 @@ class WFSScraper(Scraper):
         out.write(bytes(json_string))
         out.close()
 
-        if self.total == -1:
+        if self.totalPages == -1:
             data = json.loads(json_string)
-            self.total = data["totalFeatures"]
+            self.totalPages = ceil(data["totalFeatures"] / self.limit)
         self.writeToDb(json_string)
 
     def writeToDb(self, json_string):
         print "WARNING: writeToDb not implemented"
 
     def hasNext(self, currentPage):
-        if self.total == -1:
+        if self.totalPages == -1:
             return True
         else:
-            return currentPage < ceil(self.total / self.limit)
+            return currentPage < self.totalPages
+
+    def printProgress(self, page, passedTime):
+        pagesLeft = self.totalPages - page
+        timeDelta = datetime.timedelta(seconds=pagesLeft * self.timeAverage)
+        print "Time remaining: %s" % timeDelta
 
 
 class FileScraper(Scraper):
