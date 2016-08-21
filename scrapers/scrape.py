@@ -17,20 +17,21 @@ def scrape(serverBaseUrl, typeName, fileName, page, limit, total, sortBy):
     startTime = time.time()
     print 'fetching: %s' % url
     response = urlopen(url)
-
-    if(total == 0):
-        data = json.load(response)
-        total = data["totalFeatures"]
+    content = response.read()
 
     page = (startIndex / limit)
     indexedFilename = "%s.%d" % (fileName, page)
 
     print 'writing: %s' % indexedFilename
     out = open(indexedFilename, 'wb')
-    out.write(bytes(response.read()))
+    out.write(bytes(content))
     out.close()
 
     passedTime = time.time() - startTime
+
+    if(total == 0):
+        data = json.loads(content)
+        total = data["totalFeatures"]
 
     return page, total, passedTime
 
