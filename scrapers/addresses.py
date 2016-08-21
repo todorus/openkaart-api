@@ -1,24 +1,25 @@
 import json
 import geojson
 from shapely.geometry import shape
-import os.path
-from tables import postalcodes_to_municipalities
-from scraper import FileScraper
+from scraper import FileScraper, WFSScraper
 
 
-class PostalCodesFileScraper(FileScraper):
-
-    def before(self):
-        super(PostalCodesFileScraper, self).before()
-        postalcodes_to_municipalities(self.conn, self.cur)
+class AddressFileScraper(FileScraper):
 
     def write(self, json_string, page):
+        writeToDb(self.conn, self.cur, json_string)
+
+
+class AddressWFSScraper(WFSScraper):
+
+    def writeToDb(self, json_string):
         writeToDb(self.conn, self.cur, json_string)
 
 
 def writeToDb(connection, cursor, json_string):
     data = json.loads(json_string)
     features = data["features"]
+    affectedRows = 0
     for feature in features:
         properties = feature["properties"]
 
@@ -34,4 +35,6 @@ def writeToDb(connection, cursor, json_string):
         AND postal_codes.name = %s
         ON CONFLICT DO NOTHING
         """, (geometry_wkt, properties["postcode"][0:4]))
+        affectedRows += cursor.rowcount
     connection.commit()
+    print "inserted connection count: %d" % (affectedRows,)

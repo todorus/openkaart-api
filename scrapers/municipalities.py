@@ -21,6 +21,7 @@ class MunicipalityWFSScraper(WFSScraper):
 def writeToDb(connection, cursor, json_string):
     data = json.loads(json_string)
     features = data["features"]
+    affectedRows = 0
     for feature in features:
         properties = feature["properties"]
         code = int(properties["statcode"][2:])
@@ -32,6 +33,7 @@ def writeToDb(connection, cursor, json_string):
 
         data = (code, name, geometry_wkt)
 
-        cursor.execute("INSERT INTO municipalities (code, name, geometry) VALUES (%s, %s, ST_GeomFromText(%s))", data)
-        print "inserted municipality %s, %s" % (code, name)
+        cursor.execute("INSERT INTO municipalities (code, name, geometry) VALUES (%s, %s, ST_GeomFromText(%s)) ON CONFLICT DO NOTHING", data)
+        affectedRows += cursor.rowcount
     connection.commit()
+    print "inserted municipalities count: %d" % (affectedRows,)

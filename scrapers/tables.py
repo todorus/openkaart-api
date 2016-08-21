@@ -24,3 +24,4 @@ def postalcodes_to_municipalities(conn, cur):
     print "(re)creating postalcodes_to_municipalities"
     cur.execute("DROP TABLE IF EXISTS postalcodes_to_municipalities")
     cur.execute('CREATE TABLE postalcodes_to_municipalities (id serial PRIMARY KEY, municipality_id integer, postalcode_id integer, UNIQUE (municipality_id, postalcode_id))')
+    conn.commit()
