@@ -2,6 +2,7 @@ import json
 import geojson
 from shapely.geometry import shape
 from scraper import FileScraper, WFSScraper
+import logging
 
 
 class MunicipalityFileScraper(FileScraper):
@@ -36,4 +37,4 @@ def writeToDb(connection, cursor, json_string):
         cursor.execute("INSERT INTO municipalities (code, name, geometry) VALUES (%s, %s, ST_GeomFromText(%s)) ON CONFLICT DO NOTHING", data)
         affectedRows += cursor.rowcount
     connection.commit()
-    print "inserted municipalities count: %d" % (affectedRows,)
+    logging.info("inserted municipalities count: %d" % (affectedRows,))

@@ -1,6 +1,13 @@
 from scraper import WFSScraper
 from municipalities import MunicipalityWFSScraper
 from addresses import AddressWFSScraper
+import logging
+
+logging.basicConfig(filename='scrapers.log', level=logging.DEBUG, format='%(asctime)s %(message)s')
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+ch.setFormatter(logging.Formatter(fmt='%(asctime)s %(message)s'))
+logging.getLogger().addHandler(ch)
 
 cbsRegionsWFS = 'https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/ows'
 # WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_provincie_2016_gegeneraliseerd', '../data/provinces.geo.json', None).start()

@@ -2,7 +2,7 @@ import json
 import geojson
 from shapely.geometry import shape
 from scraper import FileScraper, WFSScraper
-
+import logging
 
 class AddressFileScraper(FileScraper):
 
@@ -37,4 +37,4 @@ def writeToDb(connection, cursor, json_string):
         """, (geometry_wkt, properties["postcode"][0:4]))
         affectedRows += cursor.rowcount
     connection.commit()
-    print "inserted connection count: %d" % (affectedRows,)
+    logging.info("inserted connection count: %d" % (affectedRows,))

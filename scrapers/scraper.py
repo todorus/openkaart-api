@@ -5,7 +5,7 @@ import time
 import datetime
 import os.path
 import psycopg2
-
+import logging
 
 def days_hours_minutes(timeDelta):
     return timeDelta.days, timeDelta.seconds//3600, (timeDelta.seconds//60)%60
@@ -43,15 +43,15 @@ class Scraper(object):
 
                 page += 1
                 attempt = 1
-                print "moving to %d" % (page,)
+                logging.info("moving to %d" % (page,))
 
             except IOError, e:
-                print "attempt %d resulted in an IOError" % attempt
+                logging.warning("attempt %d resulted in an IOError" % attempt)
                 attempt += 1
                 if attempt <= self.maxAttempts:
-                    print "retrying"
+                    logging.warning("retrying")
                 else:
-                    print "more than %d failed attempts, aborting" % self.maxAttempts
+                    logging.error("more than %d failed attempts, aborting" % self.maxAttempts)
                     break
 
     def scrape(self, page, limit):
@@ -87,7 +87,7 @@ class Scraper(object):
 
     def printProgress(self, page, passedTime):
         timeDelta = datetime.timedelta(seconds=passedTime)
-        print "duration: %s" % timeDelta
+        logging.info("duration: %s" % timeDelta)
 
 
 class WFSScraper(Scraper):
@@ -106,7 +106,7 @@ class WFSScraper(Scraper):
         else:
             url = '{}?SERVICE=WFS&request=getFeature&typeName={}&outputFormat=json&srsName=urn:x-ogc:def:crs:EPSG:4326&count={}&startIndex={}&sortBy={}'.format(self.basePath, self.typeName, limit, startIndex, self.sortBy)
 
-        print 'fetching: %s' % url
+        logging.info('fetching: %s' % url)
         response = urlopen(url)
         content = response.read()
         return content
@@ -114,7 +114,7 @@ class WFSScraper(Scraper):
     def write(self, json_string, page):
         indexedFilename = "%s.%d" % (self.fileName, page)
 
-        print 'writing: %s' % indexedFilename
+        logging.info('writing: %s' % indexedFilename)
         out = open(indexedFilename, 'wb')
         out.write(bytes(json_string))
         out.close()
@@ -122,10 +122,13 @@ class WFSScraper(Scraper):
         if self.totalPages == -1:
             data = json.loads(json_string)
             self.totalPages = ceil(data["totalFeatures"] / self.limit)
-        self.writeToDb(json_string)
+        try:
+            self.writeToDb(json_string)
+        except Exception as e:
+            logging.error(traceback.format_exc())
 
     def writeToDb(self, json_string):
-        print "WARNING: writeToDb not implemented"
+        logging.info("WARNING: writeToDb not implemented")
 
     def hasNext(self, currentPage):
         if self.totalPages == -1:
@@ -136,7 +139,7 @@ class WFSScraper(Scraper):
     def printProgress(self, page, passedTime):
         pagesLeft = self.totalPages - page
         timeDelta = datetime.timedelta(seconds=pagesLeft * self.timeAverage)
-        print "Time remaining: %s" % timeDelta
+        logging.info("Time remaining: %s" % timeDelta)
 
 
 class FileScraper(Scraper):
@@ -147,7 +150,7 @@ class FileScraper(Scraper):
     def fetch(self, page, limit):
         fileName = "%s.%d" % (self.basePath , page)
 
-        print 'loading: %s' % fileName
+        logging.info('loading: %s' % fileName)
         content = open(fileName).read()
         return content
 
