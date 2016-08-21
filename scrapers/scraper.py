@@ -35,7 +35,7 @@ class Scraper(object):
                 startTime = time.time()
                 self.scrape(page, self.limit)
                 passedTime = time.time() - startTime
-                timeDelta = datetime.timedelta(passedTime)
+                timeDelta = datetime.timedelta(seconds=passedTime)
                 print "duration: %s" % timeDelta
 
                 page += 1
