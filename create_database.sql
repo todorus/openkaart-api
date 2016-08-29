@@ -1,2 +1,2 @@
-CREATE USER todorus;
-CREATE DATABASE openkaart_development WITH OWNER todorus;
+CREATE USER scraper;
+CREATE DATABASE openkaart_development WITH OWNER scraper;

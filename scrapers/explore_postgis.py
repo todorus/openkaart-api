@@ -3,7 +3,7 @@ import geojson
 import psycopg2
 from shapely.geometry import shape
 
-conn = psycopg2.connect("dbname=openkaart_development user=todorus")
+conn = psycopg2.connect("dbname=openkaart_development user=scraper")
 cur = conn.cursor()
 
 print "postalcodes that are not matched:"

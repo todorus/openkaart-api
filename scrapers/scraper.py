@@ -26,7 +26,7 @@ class Scraper(object):
         self.close()
 
     def before(self):
-        self.conn = psycopg2.connect("dbname=openkaart_development user=todorus")
+        self.conn = psycopg2.connect("dbname=openkaart_development user=scraper")
         self.cur = self.conn.cursor()
 
     def run(self):

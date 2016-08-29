@@ -1,7 +1,7 @@
 import tables
 import psycopg2
 
-conn = psycopg2.connect("dbname=openkaart_development user=todorus")
+conn = psycopg2.connect("dbname=openkaart_development user=scraper")
 cur = conn.cursor()
 
 tables.municipalities(conn, cur)
