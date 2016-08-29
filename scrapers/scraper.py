@@ -46,7 +46,7 @@ class Scraper(object):
                 logging.info("moving to %d" % (page,))
 
             except IOError, e:
-                logging.warning("attempt %d resulted in an IOError" % attempt)
+                logging.exception("attempt %d resulted in an IOError" % attempt)
                 attempt += 1
                 if attempt <= self.maxAttempts:
                     logging.warning("retrying")
