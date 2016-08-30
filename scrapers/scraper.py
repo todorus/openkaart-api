@@ -125,10 +125,10 @@ class WFSScraper(Scraper):
         try:
             self.writeToDb(json_string)
         except Exception as e:
-            logging.error(traceback.format_exc())
+            logging.exception("Could not write json file")
 
     def writeToDb(self, json_string):
-        logging.info("WARNING: writeToDb not implemented")
+        logging.warning("WARNING: writeToDb not implemented")
 
     def hasNext(self, currentPage):
         if self.totalPages == -1:
