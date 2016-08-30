@@ -14,6 +14,7 @@ RUN useradd -m scraper
 USER scraper
 WORKDIR /home/scraper
 RUN git clone -b feature/scraper https://github.com/todorus/openkaart-api.git
+RUN mkdir openkaart-api/data
 
 # Install Postgres and PostGis
 USER root
