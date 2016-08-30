@@ -123,9 +123,10 @@ class WFSScraper(Scraper):
             data = json.loads(json_string)
             self.totalPages = ceil(data["totalFeatures"] / self.limit)
         try:
+            logging.info('writing to db')
             self.writeToDb(json_string)
         except Exception as e:
-            logging.exception("Could not write json file")
+            logging.exception("could not write to database")
 
     def writeToDb(self, json_string):
         logging.warning("WARNING: writeToDb not implemented")
