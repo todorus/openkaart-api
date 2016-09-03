@@ -28,9 +28,9 @@ def writeToDb(connection, cursor, json_string):
         code = int(properties["statcode"][2:])
         name = properties["statnaam"]
 
-        geometry_dump = json.dumps(feature["geometry"])
+        geometry_dump = json.dumps(feature["geometry"]).decode("utf8")
         geometry_geojson = geojson.loads(geometry_dump)
-        geometry_wkt = shape(geometry_geojson).wkt
+        geometry_wkt = shape(geometry_geojson).wkt.decode("utf8")
 
         data = (code, name, geometry_wkt)
 
