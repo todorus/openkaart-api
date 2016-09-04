@@ -18,4 +18,4 @@ MunicipalityWFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_gemeente_2016_ge
 # WFSScraper(cbsRegionsWFS, 'cbsgebiedsindelingen:cbs_jeugdzorgregio_2016_gegeneraliseerd', '../data/youthcare.geo.json', None).start()
 
 bagAddressWFS = 'https://geodata.nationaalgeoregister.nl/inspireadressen/wfs'
-AddressWFSScraper(bagAddressWFS, 'inspireadressen:inspireadressen', '/Volumes/openkaart_data/adressen.geo.json', "gid").start()
+AddressWFSScraper(bagAddressWFS, 'inspireadressen:inspireadressen', '/Volumes/openkaart_data/adressen.geo.json', None).start()
