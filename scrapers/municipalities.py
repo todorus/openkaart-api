@@ -32,6 +32,11 @@ def writeToDb(connection, cursor, json_string):
         geometry_geojson = geojson.loads(geometry_dump)
         geometry_wkt = shape(geometry_geojson).wkt.decode("utf8")
 
+        print "types"
+        print "code %d %s" % (code, type(code))
+        print "name %s %s" % (name, type(name))
+        print "geometry_wkt %s %s" % (geometry_wkt, type(geometry_wkt))
+
         data = (code, name, geometry_wkt)
 
         cursor.execute("INSERT INTO municipalities (code, name, geometry) VALUES (%s, %s, ST_GeomFromText(%s)) ON CONFLICT DO NOTHING", data)
