@@ -15,9 +15,14 @@ RUN apt-get install -y postgresql-9.5 postgresql-contrib-9.5 postgis-2.2
 RUN sed -i 's/peer/trust/g' /etc/postgresql/9.5/main/pg_hba.conf
 
 # Get the app and dependencies
-RUN mkdir -p /Volumes/openkaart_data/
 RUN git clone -b feature/scraper https://github.com/todorus/openkaart-api.git
 RUN pip install -r openkaart-api/scrapers/requirements.txt
+
+# Create data directories
+RUN mkdir -p /Volumes/openkaart_data/
+RUN mkdir -p /Volumes/openkaart_data/postgresql
+COPY scrapers/postgresql.conf /etc/postgresql/9.5/main/postgresql.conf
+RUN rsync -av /var/lib/postgresql/9.5/main/ /Volumes/openkaart_data/postgresql/
 
 # Configure database
 USER postgres
@@ -33,7 +38,6 @@ RUN service postgresql start && \
     service postgresql stop
 
 # make sure postgres is running and start the scraper
-USER root
 WORKDIR /openkaart-api/scrapers
 CMD service postgresql start && \
     git pull && \
