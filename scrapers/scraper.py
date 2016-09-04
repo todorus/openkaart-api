@@ -27,6 +27,7 @@ class Scraper(object):
 
     def before(self):
         self.conn = psycopg2.connect("dbname=openkaart_development user=scraper")
+        self.conn.set_client_encoding("UTF8")
         self.cur = self.conn.cursor()
 
     def run(self):
