@@ -18,12 +18,6 @@ RUN sed -i 's/peer/trust/g' /etc/postgresql/9.5/main/pg_hba.conf
 RUN git clone -b feature/scraper https://github.com/todorus/openkaart-api.git
 RUN pip install -r openkaart-api/scrapers/requirements.txt
 
-# Create data directories
-RUN mkdir -p /Volumes/openkaart_data/
-RUN mkdir -p /Volumes/openkaart_data/postgresql
-COPY scrapers/postgresql.conf /etc/postgresql/9.5/main/postgresql.conf
-RUN rsync -av /var/lib/postgresql/9.5/main/ /Volumes/openkaart_data/postgresql/
-
 # Configure database
 USER postgres
 RUN service postgresql start && \
@@ -37,9 +31,14 @@ RUN service postgresql start && \
     python openkaart-api/scrapers/create_database_tables.py  && \
     service postgresql stop
 
+# Create data directories
+RUN mkdir -p /Volumes/openkaart_data/
+COPY scrapers/postgresql.conf /etc/postgresql/9.5/main/postgresql.conf
+
 # make sure postgres is running and start the scraper
+VOLUME /Volumes/openkaart_data/
 WORKDIR /openkaart-api/scrapers
-CMD service postgresql start && \
+CMD if [ ! -d "/Volumes/openkaart_data/postgresql" ]; then rsync -av /var/lib/postgresql/9.5/main/ /Volumes/openkaart_data/postgresql; fi && \
+    service postgresql start && \
     git pull && \
     python run_scrapers.py
-VOLUME /Volumes/openkaart_data/
