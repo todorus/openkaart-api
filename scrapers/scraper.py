@@ -1,4 +1,4 @@
-from urllib import urlopen
+import requests
 import json
 from math import ceil
 import time
@@ -108,8 +108,8 @@ class WFSScraper(Scraper):
             url = '{}?SERVICE=WFS&request=getFeature&typeName={}&outputFormat=json&srsName=urn:x-ogc:def:crs:EPSG:4326&count={}&startIndex={}&sortBy={}'.format(self.basePath, self.typeName, limit, startIndex, self.sortBy)
 
         logging.info('fetching: %s' % url)
-        response = urlopen(url)
-        content = response.read()
+        response = requests.get(url, timeout=60)
+        content = response.text
         return content
 
     def write(self, json_string, page):
