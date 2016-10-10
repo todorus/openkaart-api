@@ -16,4 +16,4 @@ RUN pip install -r /deployment/requirements.txt
 
 # Start server
 WORKDIR /app
-CMD python start.py
+CMD python start_server.py
