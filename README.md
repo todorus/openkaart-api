@@ -1,15 +1,5 @@
 # openkaart-api
 
-## scraper development
+The backend for the openkaart project. The api is provided by a collection of microservices. You can find these services under **/app/{RESOURCE_NAME}**.
 
-* docker pull todorus/openkaart-scraper:dev
-* cd into the project root
-* docker run -it -v scrapers:/scrapers todorus/openkaart-scraper:dev
-
-You now have a running docker instance with all dependencies installed and a
-postgresl database running. The scrapers directory is mounted on the Docker
-container so you can make any change using your editor and run the scrapers in
-the container by:
-'''
-/scrapers/run_scrapers.py
-'''
+Each resource is treated as its own microproject within the api and will have its own README.MD file with instructions on how to develop, test and deploy the resource.
