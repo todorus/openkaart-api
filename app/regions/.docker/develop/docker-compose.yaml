@@ -1,11 +1,11 @@
 version: '2'
 services:
-  web:
+  api:
     build:
-      context: .
-      dockerfile: development.Dockerfile
+      context: ../../
+      dockerfile: ./.docker/develop/Dockerfile
     image: openkaart-resources-regions:development
     ports:
       - "5000:5000"
     volumes:
-      - ./code:/app
+      - ../../code:/app

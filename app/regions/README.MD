@@ -14,6 +14,9 @@ You can run the develop script to get you started. The script will build a Docke
 ```
 ./develop.sh
 ```
+This will start a webserver and echo the hostname and port to the console. It will run any code contained within the "/code" directory.
+
+Any changes inside the "/code" directory will be reflected in the webserver.
 
 Testing
 -------
