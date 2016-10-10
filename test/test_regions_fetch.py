@@ -1,5 +1,5 @@
 import unittest
-import app.regions.regions_fetch.handler as handler
+import app.regions.fetch.handler as handler
 import app.db.setup as db
 import app.model.region as region
 import utils
