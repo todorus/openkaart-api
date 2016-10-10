@@ -9,3 +9,5 @@ services:
       - "5000:5000"
     volumes:
       - ../../code:/app
+      - ../../../lib:/app/lib
+    command: python start_server.py

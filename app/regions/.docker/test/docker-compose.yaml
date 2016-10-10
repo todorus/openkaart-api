@@ -1,0 +1,12 @@
+version: '2'
+services:
+  api:
+    build:
+      context: ../../
+      dockerfile: ./.docker/test/Dockerfile
+    image: openkaart-resources-regions:test
+    volumes:
+      - ../../code:/app
+      - ../../../lib:/app/lib
+      - ../../tests:/tests
+    command: nose2

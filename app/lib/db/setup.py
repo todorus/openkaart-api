@@ -1,4 +1,4 @@
-import app.db.config as config
+import app.lib.db.config as config
 from py2neo import Graph
 
 # example config

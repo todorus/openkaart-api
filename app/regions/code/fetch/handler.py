@@ -1,9 +1,9 @@
 from __future__ import print_function
 import json
 import logging
-import app.model.region as region
-import app.model.pagination as pagination
-import app.db.setup as db
+import app.lib.model.region as region
+import app.lib.model.pagination as pagination
+import app.lib.db.setup as db
 
 
 log = logging.getLogger()
