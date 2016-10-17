@@ -42,8 +42,7 @@ node_modules
 .tmp
 
 #datbase configuration
-nodejscomponent/lib/config/db.json
-app/db/config.py
+app/lib/db/config.py
 
 #SERVERLESS STUFF
 admin.env
