@@ -2,7 +2,7 @@
 LOCAL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # make sure we use the latest build
-docker-compose -f $LOCAL_DIR/.docker/test/docker-compose.yaml build
+docker-compose -f $LOCAL_DIR/.docker/docker-compose-production.yaml build
 
 # run the testing container
-docker-compose -f $LOCAL_DIR/.docker/test/docker-compose.yaml up
+docker-compose -f $LOCAL_DIR/.docker/docker-compose-production.yaml up
