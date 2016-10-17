@@ -1,4 +1,4 @@
-import app.db.setup as db
+import app.lib.db.setup as db
 from unittest import TestCase
 
 

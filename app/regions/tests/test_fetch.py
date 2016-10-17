@@ -1,8 +1,8 @@
 import unittest
-import app.fetch.handler as handler
+# import app.fetch.handler as handler
 import app.lib.db.setup as db
 import app.lib.model.region as region
-import utils
+import test_lib.utils
 import json
 
 graph = db.init_graph("test")

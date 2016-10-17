@@ -13,3 +13,5 @@ RUN apt-get install -y git python python-dev python-distribute python-pip libpq-
 # Install Python requirements
 COPY .docker/test/requirements.txt /deployment/requirements.txt
 RUN pip install -r /deployment/requirements.txt
+
+RUN apt-get install -y wget
