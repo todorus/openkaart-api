@@ -15,7 +15,6 @@ from py2neo import Graph
 
 
 def init_graph(environment):
-    print "starting db %s" % (environment)
     used_config = config.db_configs[environment]
     graph = Graph(**used_config)
     return graph

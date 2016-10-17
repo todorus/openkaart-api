@@ -1,8 +1,8 @@
 import unittest
-# import app.fetch.handler as handler
+import app.fetch.handler as handler
 import app.lib.db.setup as db
 import app.lib.model.region as region
-import test_lib.utils
+import test_lib.utils as utils
 import json
 
 graph = db.init_graph("test")
@@ -28,7 +28,7 @@ class FetchRegions(unittest.TestCase):
         ]
         region.createAll(graph, databaseName, definitions)
 
-    def without_parameters(self):
+    def test_without_parameters(self):
         event = {
             "query": "nij"
         }
