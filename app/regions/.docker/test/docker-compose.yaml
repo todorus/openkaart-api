@@ -15,7 +15,7 @@ services:
     depends_on:
       - db
     links:
-      - db:db
+      - db:database
     volumes:
       - ../../code:/app
       - ../../../lib:/app/lib

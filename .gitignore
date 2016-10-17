@@ -41,7 +41,7 @@ node_modules
 .DS_Store
 .tmp
 
-#datbase configuration
+#database configuration
 app/lib/db/config.py
 
 #SERVERLESS STUFF
