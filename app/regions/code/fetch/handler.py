@@ -1,16 +1,8 @@
 from __future__ import print_function
 import json
-import logging
 import app.lib.model.region as region
 import app.lib.model.pagination as pagination
 import app.lib.db.setup as db
-
-
-log = logging.getLogger()
-log.setLevel(logging.INFO)
-
-graph = db.init_graph("test")
-databaseName = "test_database"
 
 
 def handler(event, context):
@@ -24,6 +16,9 @@ def handler(event, context):
     #       page = eventPage >= 0 ? eventPage : page;
     #     }
     #   }
+
+    graph = db.init_graph("local")
+    databaseName = "db"
 
     cursor = region.search(graph, databaseName, **event)
     data = region.readCursor(cursor)

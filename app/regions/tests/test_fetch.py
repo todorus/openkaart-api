@@ -5,14 +5,12 @@ import app.lib.model.region as region
 import tools.utils as utils
 import json
 
-graph = db.init_graph("test")
-databaseName = "test_database"
-
 
 class FetchRegions(unittest.TestCase):
 
     def setUp(self):
-        utils.wipe_db(graph, databaseName)
+        graph = db.init_graph()
+        utils.wipe_db(graph)
 
         definitions = [
             {"geometry": [[1, 1]], "name": 'Maastricht', "type": region.PLACE},
@@ -26,7 +24,7 @@ class FetchRegions(unittest.TestCase):
             {"geometry": [[9, 1]], "name": 'Oss', "type": region.PLACE},
             {"geometry": [[10, 1]], "name": 'blib', "type": region.MUNICIPALITY}
         ]
-        region.createAll(graph, databaseName, definitions)
+        region.createAll(graph, definitions)
 
     def test_without_parameters(self):
 

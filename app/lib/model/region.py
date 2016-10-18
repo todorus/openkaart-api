@@ -10,42 +10,42 @@ PROVINCE = "Province"
 CARE = "Care"
 
 
-def new(graph, databaseName, definition):
+def new(graph, definition):
     # py2neo does not support dictionary properties, so convert it to json
     if 'geometry' in definition:
         definition["geometry"] = json.dumps(definition["geometry"])
-    node = Node("Region", databaseName, **definition)
+    node = Node("Region", **definition)
     return node
 
 
-def create(graph, databaseName, definition):
+def create(graph, definition):
     # py2neo does not support dictionary properties, so convert it to json
     if 'geometry' in definition:
         definition["geometry"] = json.dumps(definition["geometry"])
-    node = new(graph, databaseName, definition)
+    node = new(graph, definition)
     return graph.create(node)
 
 
-def createAll(graph, databaseName, node_definitions):
+def createAll(graph, node_definitions):
     transaction = graph.begin()
     for definition in node_definitions:
-        node = new(graph, databaseName, definition)
+        node = new(graph, definition)
         transaction.create(node)
 
     transaction.commit()
 
 
-def exists(graph, databaseName, definition):
-    return len(match(graph, databaseName, definition)) > 0
+def exists(graph, definition):
+    return len(match(graph, definition)) > 0
 
 
-def match(graph, databaseName, definition):
+def match(graph, definition):
     selector = NodeSelector(graph)
-    result = list(selector.select("Region", databaseName, **definition))
+    result = list(selector.select("Region", **definition))
     return result
 
 
-def search(graph, databaseName, query=None, limit=10, page=0):
+def search(graph, query=None, limit=10, page=0):
     skip = page * limit
 
     result = None

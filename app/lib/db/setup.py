@@ -1,4 +1,4 @@
-def init_graph(environment):
+def init_graph(environment="local"):
     import app.lib.db.config as config
     from py2neo import Graph
 
