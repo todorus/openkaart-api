@@ -5,14 +5,13 @@ services:
     build:
       context: ../../
       dockerfile: regions/.docker/api.Dockerfile
-    image: openkaart-resources-regions:api
+    image: openkaart-resources-regions:production
     ports:
-      - "5000"
+      - "5000:5000"
     depends_on:
       - db
     links:
       - db:database
-    command: python start_server.py
 
   db:
     image: neo4j:3.0.6
