@@ -1,8 +1,8 @@
 import unittest
-import app.fetch.handler as handler
+import requests
 import app.lib.db.setup as db
 import app.lib.model.region as region
-import test_lib.utils as utils
+import tools.utils as utils
 import json
 
 graph = db.init_graph("test")
@@ -29,10 +29,8 @@ class FetchRegions(unittest.TestCase):
         region.createAll(graph, databaseName, definitions)
 
     def test_without_parameters(self):
-        event = {
-            "query": "nij"
-        }
-        result = handler.handler(event, None)
+
+        req = requests.get("http://api:5000/fetch?q=%s" % ("nij"))
 
         expected = {
           "pages": {
@@ -54,4 +52,5 @@ class FetchRegions(unittest.TestCase):
         }
 
         # self.assertEquals(json.loads(result), expected)
-        self.assertEquals(json.loads(json.dumps(result)), json.loads(json.dumps(expected)))
+        # self.assertEquals(json.loads(json.dumps(result)), json.loads(json.dumps(expected)))
+        self.assertEquals(expected, req.json())
