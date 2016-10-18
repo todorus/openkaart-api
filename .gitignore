@@ -41,9 +41,8 @@ node_modules
 .DS_Store
 .tmp
 
-#datbase configuration
-nodejscomponent/lib/config/db.json
-app/db/config.py
+#database configuration
+app/lib/db/config.py
 
 #SERVERLESS STUFF
 admin.env
