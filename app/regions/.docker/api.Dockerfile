@@ -15,9 +15,10 @@ COPY regions/.docker/requirements.txt /deployment/requirements.txt
 RUN pip install -r /deployment/requirements.txt
 
 # Copy app code
-COPY regions/code /app
-COPY lib /app/lib
+COPY    regions/code   /frame/app
+COPY    lib            /frame/app/lib 
+RUN mv  /frame/app/start_server.py /frame
 
 # Start server
-WORKDIR /app
+WORKDIR /frame
 CMD python start_server.py

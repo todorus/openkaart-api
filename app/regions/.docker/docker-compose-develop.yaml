@@ -13,9 +13,8 @@ services:
     links:
       - db:database
     volumes:
-      - ../code:/app
-      - ../../lib:/app/lib
-    command: python start_server.py
+      - ../code:/frame/app
+      - ../../lib:/frame/app/lib
 
   db:
     image: neo4j:3.0.6
