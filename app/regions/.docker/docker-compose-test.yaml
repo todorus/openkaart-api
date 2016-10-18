@@ -24,5 +24,10 @@ services:
       context: ../../../
       dockerfile: app/regions/.docker/test.Dockerfile
     image: openkaart-resources-regions:test
-    # command: bash -c "sleep 10; nose2"
+    depends_on:
+      - api
+      - db
+    links:
+      - api:api
+      - db:database
     command: bash -c "sleep 10s; echo 'starting tests'; nose2"
