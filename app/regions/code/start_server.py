@@ -11,5 +11,4 @@ def hello_root():
 def hello_fetch():
     return "Hello Fetch!"
 
-
 app.run(host="0.0.0.0", debug=True)
