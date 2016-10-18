@@ -1,0 +1,28 @@
+version: '2'
+services:
+  db:
+    image: neo4j:3.0.6
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=none
+  api:
+    build:
+      context: ../../
+      dockerfile: regions/.docker/api.Dockerfile
+    image: openkaart-resources-regions:production
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    links:
+      - db:database
+    command: python start_server.py
+  test:
+    build:
+      context: ../../../
+      dockerfile: app/regions/.docker/test.Dockerfile
+    image: openkaart-resources-regions:test
+    # command: bash -c "sleep 10; nose2"
+    command: bash -c "sleep 10s; echo 'starting tests'; nose2"
