@@ -9,5 +9,5 @@ class FetchRegions(unittest.TestCase):
 
     def test_hello_world(self):
         print "getting"
-        req = requests.get("http://api:5000/fetch")
+        req = requests.get("http://nginx/regions/fetch")
         self.assertEquals("Hello Fetch!", req.text)

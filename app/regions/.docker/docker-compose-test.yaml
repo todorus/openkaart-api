@@ -1,24 +1,39 @@
 version: '2'
 services:
-  db:
-    image: neo4j:3.0.6
-    ports:
-      - "7474:7474"
-      - "7687:7687"
-    environment:
-      - NEO4J_AUTH=none
+
   api:
     build:
       context: ../../
       dockerfile: regions/.docker/api.Dockerfile
-    image: openkaart-resources-regions:production
+    image: openkaart-resources-regions:api
     ports:
-      - "5000:5000"
+      - "5000"
     depends_on:
       - db
     links:
       - db:database
     command: python start_server.py
+
+  db:
+    image: neo4j:3.0.6
+    ports:
+      - "7474"
+      - "7687"
+    environment:
+      - NEO4J_AUTH=none
+
+  nginx:
+    build:
+      context: nginx
+      dockerfile: nginx.Dockerfile
+    image: openkaart-resources-regions:nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    links:
+      - api:regions-api
+
   test:
     build:
       context: ../../../
