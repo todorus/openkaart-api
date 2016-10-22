@@ -21,7 +21,7 @@ services:
     environment:
       - NEO4J_AUTH=none
 
-  nginx:
+  web:
     build:
       context: nginx
       dockerfile: nginx.Dockerfile
