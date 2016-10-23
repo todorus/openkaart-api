@@ -1,12 +1,8 @@
 import math
 
-# if 'limit' in event and event["limit"] > 0:
-#     limit = event["limit"]
-# if 'page' in event and event["page"] > 0:
-#     page = event["page"]
 
 def paginate(count, **kwargs):
-    page = 0
+    page = 1
     limit = 10
 
     if 'limit' in kwargs and kwargs["limit"] > 0:
@@ -15,7 +11,7 @@ def paginate(count, **kwargs):
         page = kwargs["page"]
 
     if count > 0:
-        total = math.ceil(count / limit)
+        total = math.ceil(count / float(limit))
     else:
         total = 1
 

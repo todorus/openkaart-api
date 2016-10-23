@@ -14,9 +14,9 @@ def execute(raw_params):
 
     graph = db.init_graph("local")
 
-    cursor = region.search(graph, **params)
+    cursor, count = region.search(graph, **params)
     data = region.readCursor(cursor)
-    pages = pagination.paginate(len(data), **params)
+    pages = pagination.paginate(count, **params)
     return {"data": data, "pages": pages}
 
 

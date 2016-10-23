@@ -7,7 +7,7 @@ services:
       dockerfile: regions/.docker/api.Dockerfile
     image: openkaart-resources-regions:production
     ports:
-      - "5000:5000"
+      - "5000"
     depends_on:
       - db
     links:

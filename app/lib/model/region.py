@@ -45,13 +45,14 @@ def match(graph, definition):
     return result
 
 
-def search(graph, query=None, limit=10, page=0):
-    skip = page * limit
+def search(graph, query=None, limit=10, page=1):
+    skip = (page - 1) * limit
 
     result = None
+    count = None
     if query is not None:
         query = '(?i)%s.*' % (query)
-        
+
         result = graph.run(
             '''
             MATCH (n:Region)
@@ -62,6 +63,14 @@ def search(graph, query=None, limit=10, page=0):
             LIMIT {limit}
             ''',
             query=query, skip=skip, limit=limit
+        )
+        count = graph.run(
+            '''
+            MATCH (n:Region)
+            WHERE n.name =~ {query}
+            RETURN count(n) as count
+            ''',
+            query=query
         )
     else:
         result = graph.run(
@@ -74,7 +83,15 @@ def search(graph, query=None, limit=10, page=0):
             ''',
             skip=skip, limit=limit
         )
-    return result
+        count = graph.run(
+            '''
+            MATCH (n:Region)
+            RETURN count(n) as count
+            '''
+        )
+
+    count = count.evaluate()
+    return result, count
 
 
 def readCursor(cursor):
