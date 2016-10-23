@@ -50,10 +50,12 @@ def search(graph, query=None, limit=10, page=0):
 
     result = None
     if query is not None:
+        query = '(?i)%s.*' % (query)
+        
         result = graph.run(
             '''
             MATCH (n:Region)
-            WHERE n.name =~ '(?i){query}.*'
+            WHERE n.name =~ {query}
             RETURN n
             ORDER BY LOWER(n.name), length(n.name) ASC
             SKIP {skip}
