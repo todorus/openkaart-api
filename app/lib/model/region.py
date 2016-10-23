@@ -3,11 +3,11 @@ from py2neo import Graph, Node, Relationship, NodeSelector
 import json
 
 
-ZIP = "Zip"
-PLACE = "Place"
-MUNICIPALITY = "Municipality"
-PROVINCE = "Province"
-CARE = "Care"
+ZIP = u"Zip"
+PLACE = u"Place"
+MUNICIPALITY = u"Municipality"
+PROVINCE = u"Province"
+CARE = u"Care"
 
 
 def new(graph, definition):
