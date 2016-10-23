@@ -44,4 +44,6 @@ services:
     links:
       - api:api
       - db:database
-    command: bash -c "sleep 10s; echo 'starting tests'; nose2"
+    volumes:
+      - ../results:/frame/results
+    command: bash -c "sleep 10s; echo 'starting tests'; nose2 -c tests/nose2.cfg --junit-xml"
