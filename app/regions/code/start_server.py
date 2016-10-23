@@ -1,20 +1,21 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 api = Flask("regions")
-
-
-@api.route('/')
-def hello_root():
-    return 'Hello World!'
 
 @api.route('/root')
 def project_root():
     return __name__
 
-@api.route("/fetch")
-def hello_fetch():
+@api.route("/")
+def index():
     from app.index import execute
 
-    result = execute({})
+    # extract parameters
+    params = request.args.to_dict()
+
+    # execute
+    result = execute(params)
+
+    # present result as json
     return jsonify(**result)
 
 

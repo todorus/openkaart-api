@@ -16,16 +16,16 @@ class FetchRegions(unittest.TestCase):
         utils.wipe_db(graph)
 
         definitions = [
-            {"geometry": [[1, 1]], "name": 'Maastricht', "type": region.PLACE},
-            {"geometry": [[2, 1]], "name": 'Maasdamn', "type": region.PLACE},
-            {"geometry": [[3, 1]], "name": 'bijdeMaas', "type": region.MUNICIPALITY},
-            {"geometry": [[4, 1]], "name": 'blub', "type": region.MUNICIPALITY},
-            {"geometry": [[5, 1]], "name": 'blob', "type": region.MUNICIPALITY},
-            {"geometry": [[6, 1]], "name": 'Maasland', "type": region.MUNICIPALITY},
-            {"geometry": [[7, 1]], "name": 'Overblaak', "type": region.PLACE},
-            {"geometry": [[8, 1]], "name": 'Ossdam', "type": region.PLACE},
-            {"geometry": [[9, 1]], "name": 'Oss', "type": region.PLACE},
-            {"geometry": [[10, 1]], "name": 'blib', "type": region.MUNICIPALITY}
+            {u"geometry": [[1, 1]], u"name": u'Maastricht', u"type": region.PLACE},
+            {u"geometry": [[2, 1]], u"name": u'Maasdamn', u"type": region.PLACE},
+            {u"geometry": [[3, 1]], u"name": u'bijdeMaas', u"type": region.MUNICIPALITY},
+            {u"geometry": [[4, 1]], u"name": u'blub', u"type": region.MUNICIPALITY},
+            {u"geometry": [[5, 1]], u"name": u'blob', u"type": region.MUNICIPALITY},
+            {u"geometry": [[6, 1]], u"name": u'Maasland', u"type": region.MUNICIPALITY},
+            {u"geometry": [[7, 1]], u"name": u'Overblaak', u"type": region.PLACE},
+            {u"geometry": [[8, 1]], u"name": u'Ossdam', u"type": region.PLACE},
+            {u"geometry": [[9, 1]], u"name": u'Oss', u"type": region.PLACE},
+            {u"geometry": [[10, 1]], u"name": u'blib', u"type": region.MUNICIPALITY}
         ]
         region.createAll(graph, definitions)
 
@@ -38,21 +38,21 @@ class FetchRegions(unittest.TestCase):
         # And it should be ordered by name
         # And provide pagination data
         expected = {
-          "pages": {
-            "current": 1,
-            "total": 1
+          u"pages": {
+            u"current": 1,
+            u"total": 1
           },
-          "data": [
-            {"geometry": [[3, 1]], "name": 'bijdeMaas', "type": region.MUNICIPALITY},
-            {"geometry": [[10, 1]], "name": 'blib', "type": region.MUNICIPALITY},
-            {"geometry": [[5, 1]], "name": 'blob', "type": region.MUNICIPALITY},
-            {"geometry": [[4, 1]], "name": 'blub', "type": region.MUNICIPALITY},
-            {"geometry": [[2, 1]], "name": 'Maasdamn', "type": region.PLACE},
-            {"geometry": [[6, 1]], "name": 'Maasland', "type": region.MUNICIPALITY},
-            {"geometry": [[1, 1]], "name": 'Maastricht', "type": region.PLACE},
-            {"geometry": [[9, 1]], "name": 'Oss', "type": region.PLACE},
-            {"geometry": [[8, 1]], "name": 'Ossdam', "type": region.PLACE},
-            {"geometry": [[7, 1]], "name": 'Overblaak', "type": region.PLACE},
+          u"data": [
+            {u"geometry": [[3, 1]], u"name": u'bijdeMaas', u"type": region.MUNICIPALITY},
+            {u"geometry": [[10, 1]], u"name": u'blib', u"type": region.MUNICIPALITY},
+            {u"geometry": [[5, 1]], u"name": u'blob', u"type": region.MUNICIPALITY},
+            {u"geometry": [[4, 1]], u"name": u'blub', u"type": region.MUNICIPALITY},
+            {u"geometry": [[2, 1]], u"name": u'Maasdamn', u"type": region.PLACE},
+            {u"geometry": [[6, 1]], u"name": u'Maasland', u"type": region.MUNICIPALITY},
+            {u"geometry": [[1, 1]], u"name": u'Maastricht', u"type": region.PLACE},
+            {u"geometry": [[9, 1]], u"name": u'Oss', u"type": region.PLACE},
+            {u"geometry": [[8, 1]], u"name": u'Ossdam', u"type": region.PLACE},
+            {u"geometry": [[7, 1]], u"name": u'Overblaak', u"type": region.PLACE},
           ]
         }
         self.assertEquals(expected, req.json())
@@ -67,13 +67,13 @@ class FetchRegions(unittest.TestCase):
         # And it should be ordered by length
         # And provide pagination data
         expected = {
-          "pages": {
-            "current": 1,
-            "total": 1
+          u"pages": {
+            u"current": 1,
+            u"total": 1
           },
-          "data": [
-            {"geometry": [[9, 1]], "name": 'Oss', "type": region.PLACE},
-            {"geometry": [[8, 1]], "name": 'Ossdam', "type": region.PLACE},
+          u"data": [
+            {u"geometry": [[9, 1]], u"name": u'Oss', u"type": region.PLACE},
+            {u"geometry": [[8, 1]], u"name": u'Ossdam', u"type": region.PLACE},
           ]
         }
         self.assertEquals(expected, req.json())
@@ -88,14 +88,14 @@ class FetchRegions(unittest.TestCase):
         # And it should be ordered by length
         # And provide pagination data
         expected = {
-          "pages": {
-            "current": 1,
-            "total": 1
+          u"pages": {
+            u"current": 1,
+            u"total": 1
           },
-          "data": [
-            {"geometry": [[2, 1]], "name": 'Maasdamn', "type": region.PLACE},
-            {"geometry": [[6, 1]], "name": 'Maasland', "type": region.MUNICIPALITY},
-            {"geometry": [[1, 1]], "name": 'Maastricht', "type": region.PLACE},
+          u"data": [
+            {u"geometry": [[2, 1]], u"name": u'Maasdamn', u"type": region.PLACE},
+            {u"geometry": [[6, 1]], u"name": u'Maasland', u"type": region.MUNICIPALITY},
+            {u"geometry": [[1, 1]], u"name": u'Maastricht', u"type": region.PLACE},
           ]
         }
         self.assertEquals(expected, req.json())
@@ -109,11 +109,11 @@ class FetchRegions(unittest.TestCase):
         # Then it should return an empty list
         # And provide pagination data
         expected = {
-          "pages": {
-            "current": 1,
-            "total": 1
+          u"pages": {
+            u"current": 1,
+            u"total": 1
           },
-          "data": []
+          u"data": []
         }
         self.assertEquals(expected, req.json())
 
@@ -127,13 +127,13 @@ class FetchRegions(unittest.TestCase):
         # And limit them by the specified limit
         # And provide pagination data
         expected = {
-          "pages": {
-            "current": 1,
-            "total": 5
+          u"pages": {
+            u"current": 1,
+            u"total": 5
           },
-          "data": [
-            {"geometry": [[3, 1]], "name": 'bijdeMaas', "type": region.MUNICIPALITY},
-            {"geometry": [[10, 1]], "name": 'blib', "type": region.MUNICIPALITY},
+          u"data": [
+            {u"geometry": [[3, 1]], u"name": u'bijdeMaas', u"type": region.MUNICIPALITY},
+            {u"geometry": [[10, 1]], u"name": u'blib', u"type": region.MUNICIPALITY},
           ]
         }
         self.assertEquals(expected, req.json())
@@ -148,13 +148,13 @@ class FetchRegions(unittest.TestCase):
         # And limit them by the specified limit
         # And provide pagination data
         expected = {
-          "pages": {
-            "current": 2,
-            "total": 5
+          u"pages": {
+            u"current": 2,
+            u"total": 5
           },
-          "data": [
-            {"geometry": [[5, 1]], "name": 'blob', "type": region.MUNICIPALITY},
-            {"geometry": [[4, 1]], "name": 'blub', "type": region.MUNICIPALITY},
+          u"data": [
+            {u"geometry": [[5, 1]], u"name": u'blob', u"type": region.MUNICIPALITY},
+            {u"geometry": [[4, 1]], u"name": u'blub', u"type": region.MUNICIPALITY},
           ]
         }
         self.assertEquals(expected, req.json())
@@ -169,13 +169,13 @@ class FetchRegions(unittest.TestCase):
         # And limit them by the specified limit
         # And provide pagination data
         expected = {
-          "pages": {
-            "current": 1,
-            "total": 2
+          u"pages": {
+            u"current": 1,
+            u"total": 2
           },
-          "data": [
-            {"geometry": [[2, 1]], "name": 'Maasdamn', "type": region.PLACE},
-            {"geometry": [[6, 1]], "name": 'Maasland', "type": region.MUNICIPALITY},
+          u"data": [
+            {u"geometry": [[2, 1]], u"name": u'Maasdamn', u"type": region.PLACE},
+            {u"geometry": [[6, 1]], u"name": u'Maasland', u"type": region.MUNICIPALITY},
           ]
         }
         self.assertEquals(expected, req.json())

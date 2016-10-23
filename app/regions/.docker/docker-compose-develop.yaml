@@ -19,7 +19,7 @@ services:
   db:
     image: neo4j:3.0.6
     ports:
-      - "7474"
+      - "7474:7474"
       - "7687"
     environment:
       - NEO4J_AUTH=none
