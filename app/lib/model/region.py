@@ -49,7 +49,7 @@ def search(graph, query=None, limit=10, page=0):
     skip = page * limit
 
     result = None
-    if query is None:
+    if query is not None:
         result = graph.run(
             '''
             MATCH (n:Region)
