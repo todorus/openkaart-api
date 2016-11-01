@@ -27,7 +27,7 @@ services:
       dockerfile: nginx.Dockerfile
     image: todorus/openkaart-resources-regions:nginx
     ports:
-      - "80:80"
+      - "80"
     depends_on:
       - api
     links:
