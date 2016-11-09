@@ -3,8 +3,8 @@ services:
 
   api:
     build:
-      context: ../../
-      dockerfile: regions/.docker/api.Dockerfile
+      context: ..
+      dockerfile: deployment/api/Dockerfile
     image: todorus/openkaart-resources-regions:production
     ports:
       - "5000:5000"
@@ -12,9 +12,6 @@ services:
       - db
     links:
       - db:database
-    volumes:
-      - ../code:/frame/app
-      - ../../lib:/frame/app/lib
 
   db:
     image: neo4j:3.0.6
@@ -26,12 +23,12 @@ services:
 
   web:
     build:
-      context: nginx
-      dockerfile: nginx.Dockerfile
+      context: ..
+      dockerfile: deployment/nginx/Dockerfile
     image: todorus/openkaart-resources-regions:nginx
     ports:
       - "80:80"
     depends_on:
       - api
     links:
-      - api:regions-api
+      - api:api

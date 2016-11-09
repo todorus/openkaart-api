@@ -1,7 +1,7 @@
 from __future__ import print_function
-import app.lib.model.region as region
-import app.lib.model.pagination as pagination
-import app.lib.db.setup as db
+import lib.model.region as region
+import lib.model.pagination as pagination
+import lib.db.setup as db
 
 
 def execute(raw_params):

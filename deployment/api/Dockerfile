@@ -11,14 +11,12 @@ RUN apt-get update
 RUN apt-get install -y git python python-dev python-distribute python-pip libpq-dev
 
 # Install Python requirements
-COPY regions/.docker/requirements.txt /deployment/requirements.txt
+COPY deployment/api/requirements.txt /deployment/requirements.txt
 RUN pip install -r /deployment/requirements.txt
 
 # Copy app code
-COPY    regions/code   /frame/app
-COPY    lib            /frame/app/lib 
-RUN mv  /frame/app/start_server.py /frame
+COPY    app   /app
 
 # Start server
-WORKDIR /frame
+WORKDIR /app
 CMD python start_server.py

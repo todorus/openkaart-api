@@ -1,13 +1,13 @@
 from flask import Flask, jsonify, request
 api = Flask("regions")
 
-@api.route('/root')
+@api.route('/info')
 def project_root():
     return __name__
 
 @api.route("/")
 def index():
-    from app.index import execute
+    from regions.index import execute
 
     # extract parameters
     params = request.args.to_dict()
