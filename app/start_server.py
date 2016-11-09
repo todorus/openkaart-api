@@ -1,12 +1,8 @@
 from flask import Flask, jsonify, request
-api = Flask("regions")
+api = Flask("openkaart")
 
-@api.route('/info')
-def project_root():
-    return __name__
-
-@api.route("/")
-def index():
+@api.route("/regions")
+def regions_index():
     from regions.index import execute
 
     # extract parameters
