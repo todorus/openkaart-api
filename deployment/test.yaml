@@ -3,15 +3,17 @@ services:
 
   api:
     build:
-      context: ../../
-      dockerfile: regions/.docker/api.Dockerfile
-    image: todorus/openkaart-resources-regions:production
+      context: ..
+      dockerfile: deployment/api/Dockerfile
+    image: todorus/openkaart-resources:production
     ports:
       - "5000"
     depends_on:
       - db
     links:
       - db:database
+    volumes:
+      - ../app:/app
 
   db:
     image: neo4j:3.0.6
@@ -23,21 +25,21 @@ services:
 
   web:
     build:
-      context: nginx
-      dockerfile: nginx.Dockerfile
-    image: todorus/openkaart-resources-regions:nginx
+      context: ..
+      dockerfile: deployment/nginx/Dockerfile
+    image: todorus/openkaart-resources:nginx
     ports:
       - "80"
     depends_on:
       - api
     links:
-      - api:regions-api
+      - api:api
 
   test:
     build:
-      context: ../../../
-      dockerfile: app/regions/.docker/test.Dockerfile
-    image: todorus/openkaart-resources-regions:test
+      context: ..
+      dockerfile: deployment/test/Dockerfile
+    image: todorus/openkaart-resources:test
     depends_on:
       - api
       - db
@@ -45,5 +47,5 @@ services:
       - api:api
       - db:database
     volumes:
-      - ../results:/frame/results
+      - ../reports:/frame/results
     command: bash -c "sleep 10s; echo 'starting tests'; nose2 -c tests/nose2.cfg --junit-xml"

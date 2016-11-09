@@ -2,7 +2,7 @@ import unittest
 import requests
 import app.lib.db.setup as db
 import app.lib.model.region as region
-import tools.utils as utils
+import tests.lib.utils as utils
 import json
 
 

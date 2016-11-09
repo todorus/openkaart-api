@@ -11,16 +11,14 @@ RUN apt-get update
 RUN apt-get install -y git python python-dev python-distribute python-pip libpq-dev
 
 # Install Python requirements
-COPY app/regions/.docker/requirements.txt /deployment/requirements.txt
+COPY deployment/api/requirements.txt /deployment/requirements.txt
 RUN pip install -r /deployment/requirements.txt
-COPY app/regions/.docker/test-requirements.txt /deployment/test-requirements.txt
+COPY deployment/test/requirements.txt /deployment/test-requirements.txt
 RUN pip install -r /deployment/test-requirements.txt
 
 # Install tests
-COPY app/lib /frame/app/lib
-RUN touch /frame/app/__init__.py
-COPY app/regions/tests /frame/tests
-COPY test_lib /frame/tools
+COPY app /frame/app
+COPY tests /frame/tests
 
 # Start tests
 WORKDIR /frame
