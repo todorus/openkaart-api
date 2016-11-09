@@ -2,9 +2,6 @@ version: '2'
 services:
 
   api:
-    build:
-      context: ..
-      dockerfile: deployment/api/Dockerfile
     image: todorus/openkaart-resources:production
     ports:
       - "5000"
@@ -12,8 +9,6 @@ services:
       - db
     links:
       - db:database
-    volumes:
-      - ../app:/app
 
   db:
     image: neo4j:3.0.6
@@ -24,9 +19,6 @@ services:
       - NEO4J_AUTH=none
 
   web:
-    build:
-      context: ..
-      dockerfile: deployment/nginx/Dockerfile
     image: todorus/openkaart-resources:nginx
     ports:
       - "80:80"
