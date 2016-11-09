@@ -5,7 +5,7 @@ services:
     build:
       context: ..
       dockerfile: deployment/api/Dockerfile
-    image: todorus/openkaart-resources-regions:production
+    image: todorus/openkaart-resources:production
     ports:
       - "5000:5000"
     depends_on:
@@ -27,7 +27,7 @@ services:
     build:
       context: ..
       dockerfile: deployment/nginx/Dockerfile
-    image: todorus/openkaart-resources-regions:nginx
+    image: todorus/openkaart-resources:nginx
     ports:
       - "80:80"
     depends_on:
