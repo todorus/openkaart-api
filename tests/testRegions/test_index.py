@@ -16,16 +16,16 @@ class FetchRegions(unittest.TestCase):
         utils.wipe_db(graph)
 
         definitions = [
-            {u"geometry": [[1, 1]], u"name": u'Maastricht', u"type": region.PLACE},
-            {u"geometry": [[2, 1]], u"name": u'Maasdamn', u"type": region.PLACE},
-            {u"geometry": [[3, 1]], u"name": u'bijdeMaas', u"type": region.MUNICIPALITY},
-            {u"geometry": [[4, 1]], u"name": u'blub', u"type": region.MUNICIPALITY},
-            {u"geometry": [[5, 1]], u"name": u'blob', u"type": region.MUNICIPALITY},
-            {u"geometry": [[6, 1]], u"name": u'Maasland', u"type": region.MUNICIPALITY},
-            {u"geometry": [[7, 1]], u"name": u'Overblaak', u"type": region.PLACE},
-            {u"geometry": [[8, 1]], u"name": u'Ossdam', u"type": region.PLACE},
-            {u"geometry": [[9, 1]], u"name": u'Oss', u"type": region.PLACE},
-            {u"geometry": [[10, 1]], u"name": u'blib', u"type": region.MUNICIPALITY}
+            {u"geometry": [[1, 1]], u"name": u'Maastricht', u"type": region.PLACE, u"uuid": "1"},
+            {u"geometry": [[2, 1]], u"name": u'Maasdamn', u"type": region.PLACE, u"uuid": "2"},
+            {u"geometry": [[3, 1]], u"name": u'bijdeMaas', u"type": region.MUNICIPALITY, u"uuid": "3"},
+            {u"geometry": [[4, 1]], u"name": u'blub', u"type": region.MUNICIPALITY, u"uuid": "4"},
+            {u"geometry": [[5, 1]], u"name": u'blob', u"type": region.MUNICIPALITY, u"uuid": "5"},
+            {u"geometry": [[6, 1]], u"name": u'Maasland', u"type": region.MUNICIPALITY, u"uuid": "6"},
+            {u"geometry": [[7, 1]], u"name": u'Overblaak', u"type": region.PLACE, u"uuid": "7"},
+            {u"geometry": [[8, 1]], u"name": u'Ossdam', u"type": region.PLACE, u"uuid": "8"},
+            {u"geometry": [[9, 1]], u"name": u'Oss', u"type": region.PLACE, u"uuid": "9"},
+            {u"geometry": [[10, 1]], u"name": u'blib', u"type": region.MUNICIPALITY, u"uuid": "10"}
         ]
         region.createAll(graph, definitions)
 
@@ -43,18 +43,19 @@ class FetchRegions(unittest.TestCase):
             u"total": 1
           },
           u"data": [
-            {u"geometry": [[3, 1]], u"name": u'bijdeMaas', u"type": region.MUNICIPALITY},
-            {u"geometry": [[10, 1]], u"name": u'blib', u"type": region.MUNICIPALITY},
-            {u"geometry": [[5, 1]], u"name": u'blob', u"type": region.MUNICIPALITY},
-            {u"geometry": [[4, 1]], u"name": u'blub', u"type": region.MUNICIPALITY},
-            {u"geometry": [[2, 1]], u"name": u'Maasdamn', u"type": region.PLACE},
-            {u"geometry": [[6, 1]], u"name": u'Maasland', u"type": region.MUNICIPALITY},
-            {u"geometry": [[1, 1]], u"name": u'Maastricht', u"type": region.PLACE},
-            {u"geometry": [[9, 1]], u"name": u'Oss', u"type": region.PLACE},
-            {u"geometry": [[8, 1]], u"name": u'Ossdam', u"type": region.PLACE},
-            {u"geometry": [[7, 1]], u"name": u'Overblaak', u"type": region.PLACE},
+            {u"geometry": [[3, 1]], u"name": u'bijdeMaas', u"type": region.MUNICIPALITY, u"uuid": "3"},
+            {u"geometry": [[10, 1]], u"name": u'blib', u"type": region.MUNICIPALITY, u"uuid": "10"},
+            {u"geometry": [[5, 1]], u"name": u'blob', u"type": region.MUNICIPALITY, u"uuid": "5"},
+            {u"geometry": [[4, 1]], u"name": u'blub', u"type": region.MUNICIPALITY, u"uuid": "4"},
+            {u"geometry": [[2, 1]], u"name": u'Maasdamn', u"type": region.PLACE, u"uuid": "2"},
+            {u"geometry": [[6, 1]], u"name": u'Maasland', u"type": region.MUNICIPALITY, u"uuid": "6"},
+            {u"geometry": [[1, 1]], u"name": u'Maastricht', u"type": region.PLACE, u"uuid": "1"},
+            {u"geometry": [[9, 1]], u"name": u'Oss', u"type": region.PLACE, u"uuid": "9"},
+            {u"geometry": [[8, 1]], u"name": u'Ossdam', u"type": region.PLACE, u"uuid": "8"},
+            {u"geometry": [[7, 1]], u"name": u'Overblaak', u"type": region.PLACE, u"uuid": "7"},
           ]
         }
+        self.assertEquals(200, req.status_code)
         self.assertEquals(expected, req.json())
 
     def test_with_matching_query_ordered_by_length(self):
@@ -72,8 +73,8 @@ class FetchRegions(unittest.TestCase):
             u"total": 1
           },
           u"data": [
-            {u"geometry": [[9, 1]], u"name": u'Oss', u"type": region.PLACE},
-            {u"geometry": [[8, 1]], u"name": u'Ossdam', u"type": region.PLACE},
+            {u"geometry": [[9, 1]], u"name": u'Oss', u"type": region.PLACE, u"uuid": "9"},
+            {u"geometry": [[8, 1]], u"name": u'Ossdam', u"type": region.PLACE, u"uuid": "8"},
           ]
         }
         self.assertEquals(expected, req.json())
@@ -93,11 +94,12 @@ class FetchRegions(unittest.TestCase):
             u"total": 1
           },
           u"data": [
-            {u"geometry": [[2, 1]], u"name": u'Maasdamn', u"type": region.PLACE},
-            {u"geometry": [[6, 1]], u"name": u'Maasland', u"type": region.MUNICIPALITY},
-            {u"geometry": [[1, 1]], u"name": u'Maastricht', u"type": region.PLACE},
+            {u"geometry": [[2, 1]], u"name": u'Maasdamn', u"type": region.PLACE, u"uuid": "2"},
+            {u"geometry": [[6, 1]], u"name": u'Maasland', u"type": region.MUNICIPALITY, u"uuid": "6"},
+            {u"geometry": [[1, 1]], u"name": u'Maastricht', u"type": region.PLACE, u"uuid": "1"},
           ]
         }
+        self.assertEquals(200, req.status_code)
         self.assertEquals(expected, req.json())
 
     def test_with_non_matching_query(self):
@@ -115,6 +117,7 @@ class FetchRegions(unittest.TestCase):
           },
           u"data": []
         }
+        self.assertEquals(200, req.status_code)
         self.assertEquals(expected, req.json())
 
     def test_pagination_with_only_a_limit(self):
@@ -132,10 +135,11 @@ class FetchRegions(unittest.TestCase):
             u"total": 5
           },
           u"data": [
-            {u"geometry": [[3, 1]], u"name": u'bijdeMaas', u"type": region.MUNICIPALITY},
-            {u"geometry": [[10, 1]], u"name": u'blib', u"type": region.MUNICIPALITY},
+            {u"geometry": [[3, 1]], u"name": u'bijdeMaas', u"type": region.MUNICIPALITY, u"uuid": "3"},
+            {u"geometry": [[10, 1]], u"name": u'blib', u"type": region.MUNICIPALITY, u"uuid": "10"},
           ]
         }
+        self.assertEquals(200, req.status_code)
         self.assertEquals(expected, req.json())
 
     def test_pagination_with_a_limit_and_page(self):
@@ -153,10 +157,11 @@ class FetchRegions(unittest.TestCase):
             u"total": 5
           },
           u"data": [
-            {u"geometry": [[5, 1]], u"name": u'blob', u"type": region.MUNICIPALITY},
-            {u"geometry": [[4, 1]], u"name": u'blub', u"type": region.MUNICIPALITY},
+            {u"geometry": [[5, 1]], u"name": u'blob', u"type": region.MUNICIPALITY, u"uuid": "5"},
+            {u"geometry": [[4, 1]], u"name": u'blub', u"type": region.MUNICIPALITY, u"uuid": "4"},
           ]
         }
+        self.assertEquals(200, req.status_code)
         self.assertEquals(expected, req.json())
 
     def test_pagination_with_a_limit_and_query(self):
@@ -174,8 +179,9 @@ class FetchRegions(unittest.TestCase):
             u"total": 2
           },
           u"data": [
-            {u"geometry": [[2, 1]], u"name": u'Maasdamn', u"type": region.PLACE},
-            {u"geometry": [[6, 1]], u"name": u'Maasland', u"type": region.MUNICIPALITY},
+            {u"geometry": [[2, 1]], u"name": u'Maasdamn', u"type": region.PLACE, u"uuid": "2"},
+            {u"geometry": [[6, 1]], u"name": u'Maasland', u"type": region.MUNICIPALITY, u"uuid": "6"},
           ]
         }
+        self.assertEquals(200, req.status_code)
         self.assertEquals(expected, req.json())
