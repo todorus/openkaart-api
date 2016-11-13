@@ -6,5 +6,3 @@ docker-compose -f $LOCAL_DIR/deployment/production.yaml build
 
 # push it to the repository
 docker-compose -f $LOCAL_DIR/deployment/production.yaml push
-
-#TODO start rollout

@@ -2,6 +2,9 @@ version: '2'
 services:
 
   api:
+    build:
+      context: ..
+      dockerfile: deployment/api/Dockerfile
     image: todorus/openkaart-resources:production
     ports:
       - "5000"
