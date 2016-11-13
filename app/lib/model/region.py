@@ -1,6 +1,7 @@
 from enum import Enum
 from py2neo import Graph, Node, Relationship, NodeSelector
 import json
+import uuid
 
 
 ZIP = u"Zip"
@@ -15,14 +16,13 @@ def new(graph, definition):
     # py2neo does not support dictionary properties, so convert it to json
     if 'geometry' in definition:
         definition["geometry"] = json.dumps(definition["geometry"])
+    if 'uuid' not in definition:
+        definition["uuid"] = str(uuid.uuid1())
     node = Node("Region", **definition)
     return node
 
 
 def create(graph, definition):
-    # py2neo does not support dictionary properties, so convert it to json
-    if 'geometry' in definition:
-        definition["geometry"] = json.dumps(definition["geometry"])
     node = new(graph, definition)
     return graph.create(node)
 
