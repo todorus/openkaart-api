@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, abort
 api = Flask("openkaart")
 
-@api.route("/regions/<uuid>")
+@api.route("/regions/<uuid>", methods=["GET"])
 def regions_read(uuid):
     from regions.read import execute
 
@@ -12,8 +12,9 @@ def regions_read(uuid):
 
     # present result as json
     return jsonify(**result)
+    
 
-@api.route("/regions")
+@api.route("/regions", methods=["GET"])
 def regions_index():
     from regions.index import execute
 
@@ -22,6 +23,23 @@ def regions_index():
 
     # execute
     result = execute(params)
+
+    # present result as json
+    return jsonify(**result)
+
+
+@api.route("/login", methods=["POST"])
+def login():
+    from authentication.login import execute
+
+    # extract parameters
+    params = request.args.to_dict()
+
+    # execute
+    result = execute(params)
+
+    if result is None:
+        return('', 401)
 
     # present result as json
     return jsonify(**result)
