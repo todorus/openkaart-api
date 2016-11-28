@@ -119,8 +119,13 @@ def search(graph, query=None, limit=10, page=1):
 
 
 def login(graph, username, password):
-    hashed = password.encode('utf-8')
-    return find(graph, {"username": username, "password": password})
+    user = find(graph, {"username": username})
+    if user is None:
+        return None
+    elif not bcrypt.checkpw(password.encode("utf-8"), user["password"].encode("utf-8")):
+        return None
+    else:
+        return User(uuid=user["uuid"], username=user["username"], authenticated=True)
 
 
 def crypt(password):

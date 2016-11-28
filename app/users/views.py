@@ -15,4 +15,4 @@ def login():
         return('', 401)
 
     # present result as json
-    return jsonify(**result)
+    return jsonify({"username": result.username})
