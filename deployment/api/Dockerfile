@@ -9,6 +9,8 @@ RUN apt-get update
 
 # Install Python and Basic Python Tools
 RUN apt-get install -y git python python-dev python-distribute python-pip libpq-dev
+# Install BCrypt dependencies
+RUN apt-get install -y build-essential libffi-dev
 
 # Install Python requirements
 COPY deployment/api/requirements.txt /deployment/requirements.txt

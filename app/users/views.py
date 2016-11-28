@@ -3,13 +3,13 @@ from flask import jsonify, request
 
 @api.route("/login", methods=["POST"])
 def login():
-    from authentication.login import execute
+    from users.login import execute
 
-    # extract parameters
-    params = request.args.to_dict()
+    # extract body
+    body = request.get_json(force=True)
 
     # execute
-    result = execute(params)
+    result = execute(body)
 
     if result is None:
         return('', 401)
