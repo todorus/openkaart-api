@@ -12,14 +12,24 @@ PROVINCE = u"Province"
 CARE = u"Care"
 
 
-def new(graph, definition):
+def __cleanDefinition(definition):
     # py2neo does not support dictionary properties, so convert it to json
     if 'geometry' in definition:
         definition["geometry"] = json.dumps(definition["geometry"])
     if 'uuid' not in definition:
         definition["uuid"] = str(uuid.uuid1())
+    return definition
+
+
+def new(graph, definition):
+    definition = __cleanDefinition(definition)
     node = Node("Region", **definition)
     return node
+
+
+def merge(graph, definition):
+    node = new(graph, definition)
+    return graph.merge(node)
 
 
 def create(graph, definition):
