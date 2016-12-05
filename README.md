@@ -44,6 +44,12 @@ Login to your dockerhub account with the docker client. Next run the build scrip
 ```
 And for the actual deployment, copy the files in deployment/server-files to your server and run:
 ```
+./init.sh
+```
+This will run certbot for the first time to acquire/update ssl certificates for your domain. Next run:
+```
 ./deploy.sh
 ```
-This will run certbot to acquire/update ssl certificates for your domain and restart the application.
+To start the application.
+
+#TODO certbot certificate renewal
