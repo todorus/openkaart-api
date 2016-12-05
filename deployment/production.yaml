@@ -7,6 +7,9 @@ volumes:
 services:
 
   api:
+    build:
+      context: ..
+      dockerfile: deployment/api/Dockerfile
     image: todorus/openkaart-resources:production
     ports:
       - "5000"
@@ -26,6 +29,9 @@ services:
       - ./data:/data
 
   web:
+    build:
+      context: ..
+      dockerfile: deployment/nginx/Dockerfile
     image: todorus/openkaart-resources:nginx
     ports:
       - "80:80"
@@ -36,3 +42,9 @@ services:
     volumes:
       - webroot:/var/www
       - certificates:/certificates
+
+  certbot:
+    build:
+      context: ..
+      dockerfile: deployment/certbot/Dockerfile
+    image: todorus/openkaart-resources:certbot

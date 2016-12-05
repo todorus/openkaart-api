@@ -1,0 +1,12 @@
+version: '2'
+
+volumes:
+  webroot:
+  certificates:
+
+services:
+  certbot:
+    image: todorus/openkaart-resources:certbot
+    volumes:
+      - webroot:/webroot
+      - certificates:/etc/letsencrypt/live
