@@ -1,0 +1,25 @@
+version: '2'
+
+volumes:
+  webroot:
+  certificates:
+
+services:
+  
+  web:
+    image: todorus/openkaart-resources:nginx-dev
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    links:
+      - api:api
+    volumes:
+      - webroot:/var/www
+      - certificates:/certificates
+
+  certbot:
+    image: todorus/openkaart-resources:certbot
+    volumes:
+      - webroot:/webroot
+      - certificates:/etc/letsencrypt/live

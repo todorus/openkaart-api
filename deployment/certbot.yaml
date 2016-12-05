@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+
+  web:
+    build:
+      context: ..
+      dockerfile: deployment/nginx/Dockerfile
+    image: todorus/openkaart-resources:nginx-dev
+
+  certbot:
+    build:
+      context: ..
+      dockerfile: deployment/certbot/Dockerfile
+    image: todorus/openkaart-resources:certbot

@@ -5,6 +5,7 @@ volumes:
   certificates:
 
 services:
+
   certbot:
     image: todorus/openkaart-resources:certbot
     volumes:
