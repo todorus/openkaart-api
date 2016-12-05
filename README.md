@@ -28,4 +28,22 @@ The test container will manipulate the state of the database, by directly connec
 
 Deployment
 ----------
-*TODO*
+You will need to adjust the names of the images to match your dockerhub username. You can find these names in:
+```
+deployment/production.yaml
+deployment/server-files/certbot.yaml
+deployment/server-files/production.yaml
+```
+You'll also need to update the server_name directives in the nginx config.
+```
+deployment/nginx.api.conf
+```
+Login to your dockerhub account with the docker client. Next run the build script to build the docker images and push them to your repo.
+```
+./build.sh
+```
+And for the actual deployment, copy the files in deployment/server-files to your server and run:
+```
+./deploy.sh
+```
+This will run certbot to acquire/update ssl certificates for your domain and restart the application.

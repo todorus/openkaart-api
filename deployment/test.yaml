@@ -26,8 +26,8 @@ services:
   web:
     build:
       context: ..
-      dockerfile: deployment/nginx/Dockerfile
-    image: todorus/openkaart-resources:nginx
+      dockerfile: deployment/nginx/Dockerfile.dev
+    image: todorus/openkaart-resources:nginx-dev
     ports:
       - "80"
     depends_on:

@@ -1,4 +1,9 @@
 version: '2'
+
+volumes:
+  webroot:
+  certificates:
+
 services:
 
   api:
@@ -17,9 +22,11 @@ services:
     image: neo4j:3.0.6
     ports:
       - "7474:7474"
-      - "7687"
+      - "7687:7687"
     environment:
       - NEO4J_AUTH=none
+    volumes:
+      - ./data:/data
 
   web:
     build:
@@ -32,3 +39,6 @@ services:
       - api
     links:
       - api:api
+    volumes:
+      - webroot:/var/www
+      - certificates:/certificates
