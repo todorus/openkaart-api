@@ -16,7 +16,6 @@ VOLUME /etc/letsencrypt/live
 CMD letsencrypt certonly \
     --webroot -w /webroot \
     -d api.waarregelikzorg.nl -d staging.waarregelikzorg.nl \
+    --renew-by-default \
     --text --non-interactive \
     --agree-tos --email todorus@todorus.com
-
-# letsencrypt certonly --webroot -w /webroot -d api.waarregelikzorg.nl -d staging.waarregelikzorg.nl

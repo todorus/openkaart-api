@@ -41,4 +41,4 @@ services:
     image: todorus/openkaart-resources:certbot
     volumes:
       - webroot:/webroot
-      - certificates:/etc/letsencrypt/live
+      - certificates:/etc/letsencrypt
