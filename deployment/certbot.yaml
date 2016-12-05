@@ -5,7 +5,7 @@ services:
   web:
     build:
       context: ..
-      dockerfile: deployment/nginx/Dockerfile
+      dockerfile: deployment/nginx/Dockerfile.dev
     image: todorus/openkaart-resources:nginx-dev
 
   certbot:

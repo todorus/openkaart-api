@@ -5,7 +5,26 @@ volumes:
   certificates:
 
 services:
-  
+
+  api:
+    image: todorus/openkaart-resources:production
+    ports:
+      - "5000"
+    depends_on:
+      - db
+    links:
+      - db:database
+
+  db:
+    image: neo4j:3.0.6
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=none
+    volumes:
+      - ./data:/data
+
   web:
     image: todorus/openkaart-resources:nginx-dev
     ports:
