@@ -11,4 +11,11 @@ api.secret_key = "development"
 @login_manager.user_loader
 def loadUser(uuid):
     graph = db.init_graph("local")
-    return user.find(graph, {"uuid": uuid})
+    result = user.find(graph, {"uuid": uuid})
+    result.is_authenticated = True
+    return result
+
+
+@api.errorhandler(401)
+def custom_401(error):
+    return('', 401)

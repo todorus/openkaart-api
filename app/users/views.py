@@ -26,7 +26,7 @@ def login():
 
 @api.route("/me", methods=["GET"])
 @login_required
-def current_user():
+def me():
     result = current_user
 
     # present result as json
