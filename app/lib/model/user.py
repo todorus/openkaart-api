@@ -5,8 +5,9 @@ import uuid
 
 class User:
     """Represents a user"""
-    def __init__(self, username=None, authenticated=False, active=False, anonymous=False, uuid=None):
+    def __init__(self, username=None, password=None, authenticated=False, active=False, anonymous=False, uuid=None):
         self.username = username
+        self.password = password
         self.is_authenticated = authenticated
         self.is_active = active
         self.is_anonymous = anonymous
@@ -39,16 +40,20 @@ def merge(graph, definition):
 
 def create(graph, definition):
     node = new(graph, definition)
-    return graph.create(node)
+    graph.create(node)
+    return __nodeToUser(node)
 
 
 def createAll(graph, node_definitions):
+    nodes = []
     transaction = graph.begin()
     for definition in node_definitions:
         node = new(graph, definition)
         transaction.create(node)
+        nodes.append(node)
 
     transaction.commit()
+    return __nodesToUsers(nodes)
 
 
 def exists(graph, definition):
@@ -57,8 +62,8 @@ def exists(graph, definition):
 
 def match(graph, definition):
     selector = NodeSelector(graph)
-    result = list(selector.select("User", **definition))
-    return result
+    nodes = list(selector.select("User", **definition))
+    return __nodesToUsers(nodes)
 
 
 def find(graph, definition):
@@ -115,19 +120,38 @@ def search(graph, query=None, limit=10, page=1):
         )
 
     count = count.evaluate()
-    return result, count
+    users = __nodesToUsers(result)
+    return users, count
 
 
 def login(graph, username, password):
     user = find(graph, {"username": username})
     if user is None:
         return None
-    elif not bcrypt.checkpw(password.encode("utf-8"), user["password"].encode("utf-8")):
+    elif not bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
         return None
     else:
-        return User(uuid=user["uuid"], username=user["username"], authenticated=True)
+        return User(uuid=user.uuid, username=user.username, authenticated=True, active=True)
 
 
 def crypt(password):
     password = password.encode('utf-8')
     return bcrypt.hashpw(password, bcrypt.gensalt(14))
+
+
+def __nodeToUser(node):
+    converted = dict(node)
+    kwargs = {
+        "uuid": converted["uuid"],
+        "username": converted["username"],
+        "password": converted["password"],
+        "active": True
+    }
+    return User(**kwargs)
+
+
+def __nodesToUsers(nodes):
+    users = []
+    for node in nodes:
+        users.append(__nodeToUser(node))
+    return users
