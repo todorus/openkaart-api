@@ -23,10 +23,10 @@ class Login(unittest.TestCase):
 
         # And I am logged in
         payload = {"username": "user2", "password": "password2"}
-        loginReq = requests.post("http://web/login", json=payload)
+        loginReq = requests.post("http://web/users/login", json=payload)
 
         # When I ask for my user
-        req = requests.get("http://web/me", cookies=loginReq.cookies)
+        req = requests.get("http://web/users/me", cookies=loginReq.cookies)
 
         # Then it should return a NOT FOUND status
         self.assertEquals(200, req.status_code)
@@ -38,7 +38,7 @@ class Login(unittest.TestCase):
         # And I am not logged in
 
         # When I ask for my user
-        req = requests.get("http://web/me")
+        req = requests.get("http://web/users/me")
 
         # Then it should return an NOT FOUND status
         self.assertEquals(401, req.status_code)

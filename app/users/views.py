@@ -2,7 +2,7 @@ from init import api
 from flask import jsonify, request
 from flask_login import login_required, login_user, current_user
 
-@api.route("/login", methods=["POST"])
+@api.route("/users/login", methods=["POST"])
 def login():
     from users.login import execute
 
@@ -24,7 +24,7 @@ def login():
     return jsonify({"username": result.username})
 
 
-@api.route("/me", methods=["GET"])
+@api.route("/users/me", methods=["GET"])
 @login_required
 def me():
     result = current_user

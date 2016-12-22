@@ -23,7 +23,7 @@ class Login(unittest.TestCase):
 
         # When I try to login with this combination
         payload = {"username": "user2", "password": "password2"}
-        req = requests.post("http://web/login", json=payload)
+        req = requests.post("http://web/users/login", json=payload)
 
         # Then it should return an OK status
         self.assertEquals(200, req.status_code)
@@ -34,7 +34,7 @@ class Login(unittest.TestCase):
 
         # When I try to login with an incorrect password
         payload = {"username": "user1", "password": "incorrect"}
-        req = requests.post("http://web/login", json=payload)
+        req = requests.post("http://web/users/login", json=payload)
 
         # Then it should return an UNAUTHORIZED status
         self.assertEquals(401, req.status_code)
@@ -45,7 +45,7 @@ class Login(unittest.TestCase):
 
         # When I try to login with an incorrect combination
         payload = {"username": "user3", "password": "password1"}
-        req = requests.post("http://web/login", json=payload)
+        req = requests.post("http://web/users/login", json=payload)
 
         # Then it should return an UNAUTHORIZED status
         self.assertEquals(401, req.status_code)
