@@ -126,7 +126,7 @@ def search(graph, query=None, limit=10, page=1):
 
 
 def login(graph, username, password):
-    user = find(graph, {"username": username})
+    user = find(graph, {"username": username.encode("utf-8")})
     if user is None:
         logging.warning("no user found with name %s" % username)
         return None
