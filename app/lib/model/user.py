@@ -2,6 +2,7 @@ from enum import Enum
 from py2neo import Graph, Node, Relationship, NodeSelector
 import bcrypt
 import uuid
+import logging
 
 class User:
     """Represents a user"""
@@ -127,8 +128,10 @@ def search(graph, query=None, limit=10, page=1):
 def login(graph, username, password):
     user = find(graph, {"username": username})
     if user is None:
+        logging.warning("no user found with name %s" % username)
         return None
     elif not bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
+        logging.warning("password does not match with that of %s" % username)
         return None
     else:
         return User(uuid=user.uuid, username=user.username, authenticated=True, active=True)
