@@ -34,6 +34,9 @@ class Login(unittest.TestCase):
         self.assertEquals(200, req.status_code)
         # And a user
         self.assertEquals({"username": "user2"}, req.json())
+        # And a fresh JWT token
+        assert "JWT" in req.headers
+        # TODO check token correctness
 
     def test_me_not_logged_in(self):
 
