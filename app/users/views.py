@@ -1,6 +1,6 @@
 from init import api
 from flask import jsonify, request
-from flask_login import login_required, login_user, current_user
+from lib.authorization import login_required, current_user
 
 @api.route("/users/login", methods=["POST"])
 def login():
@@ -29,15 +29,11 @@ def login():
 
 
 @api.route("/users/me", methods=["GET"])
+@login_required
 def me():
     from users.me import execute
 
-    result = None
-
-    if 'Authorization' in request.headers:
-        authorization = request.headers['Authorization'].encode('ascii', 'ignore')
-        token = str.replace(str(authorization), 'Bearer ', '')
-        result = execute(token)
+    result = current_user()
 
     if result is None:
         return('', 401)
