@@ -29,7 +29,6 @@ def login():
 
 
 @api.route("/users/me", methods=["GET"])
-# @login_required
 def me():
     from users.me import execute
 
