@@ -29,9 +29,19 @@ def login():
 
 
 @api.route("/users/me", methods=["GET"])
-@login_required
+# @login_required
 def me():
-    result = current_user
+    from users.me import execute
+
+    result = None
+
+    if 'Authorization' in request.headers:
+        authorization = request.headers['Authorization'].encode('ascii', 'ignore')
+        token = str.replace(str(authorization), 'Bearer ', '')
+        result = execute(token)
+
+    if result is None:
+        return('', 401)
 
     # present result as json
     return jsonify({"username": result.username})
