@@ -13,7 +13,7 @@ def encode(data):
         "exp": now + valid_period,
         "data": data
     }
-    return jwt.encode(payload, secret_key, algorithm='HS256')
+    return jwt.encode(payload, secret_key, algorithm=algorithm)
 
 
 def decode(token):
