@@ -43,6 +43,8 @@ class Login(unittest.TestCase):
         self.assertEquals(401, req.status_code)
         # And an empty body
         self.assertEquals("", req.text)
+        # And leak no token
+        assert "JWT" not in req.headers
 
     def test_incorrect_username(self):
 
@@ -54,3 +56,5 @@ class Login(unittest.TestCase):
         self.assertEquals(401, req.status_code)
         # And an empty body
         self.assertEquals("", req.text)
+        # And leak no token
+        assert "JWT" not in req.headers
