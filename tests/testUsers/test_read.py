@@ -24,14 +24,19 @@ class Login(unittest.TestCase):
         # And I am logged in
         payload = {"username": "user2", "password": "password2"}
         loginReq = requests.post("http://web/users/login", json=payload)
+        jwt = loginReq.headers["JWT"]
 
         # When I ask for my user
-        req = requests.get("http://web/users/me", cookies=loginReq.cookies)
+        headers = {"Authorization": "Bearer %s" % jwt}
+        req = requests.get("http://web/users/me", headers=headers)
 
         # Then it should return a NOT FOUND status
         self.assertEquals(200, req.status_code)
         # And a user
         self.assertEquals({"username": "user2"}, req.json())
+        # And a fresh JWT token
+        assert "JWT" in req.headers
+        # TODO check token correctness
 
     def test_me_not_logged_in(self):
 
