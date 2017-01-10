@@ -6,13 +6,18 @@ algorithm = 'HS256'
 secret_key = "development"
 
 
-def encode(data):
-    now = time.time()
+def encode(data, iat=None, exp=None):
+    if iat is None:
+        iat = time.time()
+    if exp is None:
+        exp = iat + valid_period
+
     payload = {
-        "iat": now,
-        "exp": now + valid_period,
+        "iat": iat,
+        "exp": exp,
         "data": data
     }
+    
     return jwt.encode(payload, secret_key, algorithm=algorithm)
 
 
