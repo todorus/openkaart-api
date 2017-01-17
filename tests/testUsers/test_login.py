@@ -3,6 +3,8 @@ import requests
 import app.lib.db.setup as db
 import app.lib.model.user as user
 import tests.lib.utils as utils
+import base64
+import json
 
 
 class Login(unittest.TestCase):
@@ -12,12 +14,12 @@ class Login(unittest.TestCase):
         graph = db.init_graph()
         utils.wipe_db(graph)
 
-        definitions = [
-            {u"username": "user1", u"password": u'password1'},
-            {u"username": "user2", u"password": u'password2'},
-            {u"username": "user3", u"password": u'password3'},
+        self.definitions = [
+            {u"uuid": "uuid1", u"username": "user1", u"password": u'password1'},
+            {u"uuid": "uuid2", u"username": "user2", u"password": u'password2'},
+            {u"uuid": "uuid3", u"username": "user3", u"password": u'password3'},
         ]
-        user.createAll(graph, definitions)
+        user.createAll(graph, self.definitions)
 
     def test_with_correct_credentials(self):
 
@@ -31,7 +33,12 @@ class Login(unittest.TestCase):
         self.assertEquals({"username": "user2"}, req.json()["user"])
         # And a token
         assert "JWT" in req.headers
-        # TODO check token correctness
+        payload_encoded = req.headers["JWT"].split(".")[1]
+        payload_encoded = payload_encoded + '=' * (-len(payload_encoded) % 4)
+        payload_decoded = base64.b64decode(payload_encoded)
+        payload = json.loads(payload_decoded)
+        user2Def = self.definitions[1]
+        self.assertEquals(user2Def[u"uuid"], payload["data"]["sub"])
 
     def test_incorrect_password(self):
 
