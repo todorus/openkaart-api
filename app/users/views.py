@@ -22,8 +22,7 @@ def login():
     token = jwt.encode(token_data)
 
     # present result as json
-    user = {"username": result.username}
-    response = jsonify({"user": user})
+    response = jsonify({"username": result.username})
     response.headers["JWT"] = token
     return response
 

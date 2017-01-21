@@ -30,7 +30,7 @@ class Login(unittest.TestCase):
         # Then it should return an OK status
         self.assertEquals(200, req.status_code)
         # And a user
-        self.assertEquals({"username": "user2"}, req.json()["user"])
+        self.assertEquals({"username": "user2"}, req.json())
         # And a token
         assert "JWT" in req.headers
         payload_encoded = req.headers["JWT"].split(".")[1]
