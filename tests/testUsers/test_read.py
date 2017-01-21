@@ -5,6 +5,8 @@ import app.lib.db.setup as db
 import app.lib.model.user as user
 import app.lib.jwt as jwt
 import tests.lib.utils as utils
+import base64
+import json
 
 
 class Login(unittest.TestCase):
@@ -14,13 +16,13 @@ class Login(unittest.TestCase):
         graph = db.init_graph()
         utils.wipe_db(graph)
 
-        definitions = [
-            {u"username": "user1", u"password": u'password1'},
-            {u"username": "user2", u"password": u'password2'},
-            {u"username": "user3", u"password": u'password3'},
+        self.definitions = [
+            {u"username": "user1", u"password": u'password1', u"uuid": u'uuid1'},
+            {u"username": "user2", u"password": u'password2', u"uuid": u'uuid2'},
+            {u"username": "user3", u"password": u'password3', u"uuid": u'uuid3'},
             {u"username": "user4", u"password": u'password4', u"uuid": u'uuid4'},
         ]
-        user.createAll(graph, definitions)
+        user.createAll(graph, self.definitions)
 
     def test_me_logged_in(self):
 
@@ -39,7 +41,16 @@ class Login(unittest.TestCase):
         self.assertEquals({"username": "user2"}, req.json())
         # And a fresh JWT token
         assert "JWT" in req.headers
-        # TODO check token correctness
+        payload_encoded = req.headers["JWT"].split(".")[1]
+        payload_encoded = payload_encoded + '=' * (-len(payload_encoded) % 4)
+        payload_decoded = base64.b64decode(payload_encoded)
+        payload = json.loads(payload_decoded)
+        userDef = self.definitions[1] #user2
+        expected = {
+            "uuid": userDef[u"uuid"],
+            "username": userDef[u"username"]
+        }
+        self.assertEquals(expected, payload["data"]["sub"])
 
     def test_me_not_logged_in(self):
 
@@ -77,8 +88,12 @@ class Login(unittest.TestCase):
         iat = time.time() - 10
         exp = iat + 100000
 
+        userDef = self.definitions[3] #user4
         token_data = {
-            "sub": u'uuid4'
+            "sub": {
+                "uuid": userDef[u"uuid"],
+                "username": userDef[u"username"]
+            }
         }
         token = jwt.encode(token_data, iat=iat, exp=exp)
 

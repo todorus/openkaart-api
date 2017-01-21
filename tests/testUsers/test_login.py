@@ -38,7 +38,11 @@ class Login(unittest.TestCase):
         payload_decoded = base64.b64decode(payload_encoded)
         payload = json.loads(payload_decoded)
         user2Def = self.definitions[1]
-        self.assertEquals(user2Def[u"uuid"], payload["data"]["sub"])
+        expected = {
+            "uuid": user2Def[u"uuid"],
+            "username": user2Def[u"username"]
+        }
+        self.assertEquals(expected, payload["data"]["sub"])
 
     def test_incorrect_password(self):
 

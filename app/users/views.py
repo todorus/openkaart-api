@@ -17,7 +17,10 @@ def login():
         return('', 401)
 
     token_data = {
-        "sub": result.uuid
+        "sub": {
+            "uuid": result.uuid,
+            "username": result.username
+        }
     }
     token = jwt.encode(token_data)
 

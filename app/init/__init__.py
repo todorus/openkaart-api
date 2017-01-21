@@ -22,7 +22,10 @@ def check_token():
 def refresh_token(response):
     if g.user is not None:
         token_data = {
-            "sub": current_user().uuid
+            "sub": {
+                "uuid": current_user().uuid,
+                "username": current_user().username
+            }
         }
         token = jwt.encode(token_data)
         response.headers["JWT"] = token

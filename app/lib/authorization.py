@@ -28,4 +28,4 @@ def user_for_token(token):
         return None
 
     graph = db.init_graph("local")
-    return user.find(graph, {"uuid": data["sub"]})
+    return user.find(graph, {"uuid": data["sub"]["uuid"]})
