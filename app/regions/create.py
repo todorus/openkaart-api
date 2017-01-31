@@ -1,6 +1,10 @@
 import lib.model.region as region
 import lib.db.setup as db
 import json
+import geojson
+from geojson import Feature
+from shapely.geometry import shape, mapping
+from shapely.ops import cascaded_union
 
 
 def execute(name, kind, childrenUuids=[]):
@@ -19,11 +23,15 @@ def execute(name, kind, childrenUuids=[]):
         child = region.find(graph, definition)
         if child is None:
             return None
+        child_geometry = geojson.loads(child["geometry"])
+        # child_feature = Feature(geometry=child_geometry)
+        child_shape = shape(child_geometry)
+        children.append(child_shape)
 
-        children.append(child)
-
-    #TODO append child geometries
+    #TODO merge child geometries
+    geometry = cascaded_union(children)
+    mapped_geometry = mapping(geometry)
     #TODO create the region
     #TODO return the region
 
-    return {}
+    return {"geometry": mapped_geometry, "name": name, "type": kind}

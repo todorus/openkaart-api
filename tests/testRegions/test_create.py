@@ -67,38 +67,17 @@ class CreateRegion(unittest.TestCase):
         }
 
         self.polyAB = {
-            "type": "Polygon",
-            "coordinates": [
-              [
+            u"type": u"Polygon",
+            u"coordinates": [
                 [
-                  10.005390809136088,
-                  53.55936379867258
-                ],
-                [
-                  10.046997,
-                  53.598209
-                ],
-                [
-                  10.117721,
-                  53.531737
-                ],
-                [
-                  10.026838636912657,
-                  53.54486184801601
-                ],
-                [
-                  10.000991,
-                  53.50418
-                ],
-                [
-                  9.926834,
-                  53.551731
-                ],
-                [
-                  10.005390809136088,
-                  53.55936379867258
+                    [10.026838636912657, 53.54486184801601],
+                    [10.000991, 53.50418],
+                    [9.926834, 53.551731],
+                    [10.005390809136088, 53.55936379867258],
+                    [10.046997, 53.598209],
+                    [10.117721, 53.531737],
+                    [10.026838636912657, 53.54486184801601]
                 ]
-              ]
             ]
         }
 
@@ -137,7 +116,7 @@ class CreateRegion(unittest.TestCase):
         payload = {
             "name": "new_region",
             "type": "Care",
-            "children": [u"1", u"2"]
+            "children": [u"2", u"1"]
         }
         url = "http://web/regions"
         req = requests.post(url, json=payload, headers=headers)
@@ -152,8 +131,8 @@ class CreateRegion(unittest.TestCase):
             response_json.pop("uuid")
         expected = {
             u"geometry": self.polyAB,
-            "name": "new_region",
-            "type": "Care"
+            u"name": u"new_region",
+            u"type": u"Care"
         }
         self.assertEquals(expected, response_json)
 
