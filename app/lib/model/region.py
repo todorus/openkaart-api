@@ -130,7 +130,7 @@ def count(graph, query=None):
             RETURN count(n) as count
             '''
         )
-    return count
+    return count.evaluate()
 
 
 def readCursor(cursor):
