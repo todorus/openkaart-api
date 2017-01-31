@@ -151,7 +151,7 @@ class CreateRegion(unittest.TestCase):
         if "uuid" in response_json:
             response_json.pop("uuid")
         expected = {
-            u"geometry": polyAB,
+            u"geometry": self.polyAB,
             "name": "new_region",
             "type": "Care"
         }

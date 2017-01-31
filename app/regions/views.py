@@ -43,9 +43,13 @@ def regions_create():
     from regions.create import execute
 
     # extract parameters
-    params = request.args.to_dict()
+    params = request.get_json()
 
     # execute
+    # api.logger.info('''
+    #     "name": %s,
+    #     "type": %s,
+    #     "children": %s ''' % (params.get("name"), params.get("type"), params.get("children")))
     result = execute(params.get("name"), params.get("type"), params.get("children"))
 
     # present result as json

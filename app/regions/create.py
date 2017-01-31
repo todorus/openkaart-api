@@ -3,8 +3,12 @@ import lib.db.setup as db
 import json
 
 
-def execute(name, type, childrenUuids=[]):
-    if childrenUuids is None:
+def execute(name, kind, childrenUuids=[]):
+    if name is None or len(name) == 0:
+        return None
+    if kind is None or len(kind) == 0:
+        return None
+    if childrenUuids is None or len(childrenUuids) == 0:
         return None
 
     graph = db.init_graph("local")
@@ -16,6 +20,10 @@ def execute(name, type, childrenUuids=[]):
         if child is None:
             return None
 
-        children.push(child)
+        children.append(child)
+
+    #TODO append child geometries
+    #TODO create the region
+    #TODO return the region
 
     return {}
