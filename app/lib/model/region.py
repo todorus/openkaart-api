@@ -113,6 +113,26 @@ def search(graph, query=None, limit=10, page=1):
     return result, count
 
 
+def count(graph, query=None):
+    if query is not None:
+        count = graph.run(
+            '''
+            MATCH (n:Region)
+            WHERE n.name =~ {query}
+            RETURN count(n) as count
+            ''',
+            query=query
+        )
+    else:
+        count = graph.run(
+            '''
+            MATCH (n:Region)
+            RETURN count(n) as count
+            '''
+        )
+    return count
+
+
 def readCursor(cursor):
     data = []
 

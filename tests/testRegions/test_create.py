@@ -3,7 +3,9 @@ import requests
 import app.lib.db.setup as db
 import app.lib.model.region as region
 import app.lib.model.user as user
+import app.lib.model.relations as relations
 import tests.lib.utils as utils
+from py2neo import Relationship
 
 
 class CreateRegion(unittest.TestCase):
@@ -11,8 +13,8 @@ class CreateRegion(unittest.TestCase):
     # Given I have a a set of regions
 
     def setUp(self):
-        graph = db.init_graph()
-        utils.wipe_db(graph)
+        self.graph = db.init_graph()
+        utils.wipe_db(self.graph)
 
         # testdata from http://turfjs.org/static/docs/module-turf_merge.html
 
@@ -105,14 +107,19 @@ class CreateRegion(unittest.TestCase):
             {u"geometry": self.polyB, u"name": u'1002', u"type": region.ZIP, u"uuid": u"2"},
             {u"geometry": self.polyAB, u"name": u'Maas', u"type": region.MUNICIPALITY, u"uuid": u"3"}
         ]
-        region.createAll(graph, region_definitions)
+        region.createAll(self.graph, region_definitions)
+        self.regionCount = region.count(self.graph)
 
-        #TODO create relations
+        region0 = region_definitions[0]
+        region1 = region_definitions[1]
+        region2 = region_definitions[2]
+        self.graph.create(Relationship(region0, relations.BELONGS_TO, region2))
+        self.graph.create(Relationship(region1, relations.BELONGS_TO, region2))
 
         user_definitions = [
             {u"username": "user1", u"password": u'password1', u"uuid": u'uuid1'},
         ]
-        user.createAll(graph, user_definitions)
+        user.createAll(self.graph, user_definitions)
 
     def login(self):
         payload = {"username": "user1", "password": "password1"}
@@ -151,7 +158,7 @@ class CreateRegion(unittest.TestCase):
         self.assertEquals(expected, response_json)
 
         # And the Region is created
-        #TODO check
+        self.assertEquals(self.regionCount + 1, region.count(self.graph))
         # And the Region has the correct children
         #TODO check
 
@@ -174,7 +181,7 @@ class CreateRegion(unittest.TestCase):
         self.assertEquals("", req.text)
 
         # And there should not have been a Region created
-        #TODO check
+        self.assertEquals(self.regionCount, region.count(self.graph))
 
     def test_without_children(self):
         # And I am logged in
@@ -196,7 +203,7 @@ class CreateRegion(unittest.TestCase):
         self.assertEquals("", req.text)
 
         # And there should not have been a Region created
-        #TODO check
+        self.assertEquals(self.regionCount, region.count(self.graph))
 
     def test_without_name(self):
         # And I am logged in
@@ -217,7 +224,7 @@ class CreateRegion(unittest.TestCase):
         self.assertEquals("", req.text)
 
         # And there should not have been a Region created
-        #TODO check
+        self.assertEquals(self.regionCount, region.count(self.graph))
 
     def test_invalid_name(self):
         # And I am logged in
@@ -239,4 +246,4 @@ class CreateRegion(unittest.TestCase):
         self.assertEquals("", req.text)
 
         # And there should not have been a Region created
-        #TODO check
+        self.assertEquals(self.regionCount, region.count(self.graph))
