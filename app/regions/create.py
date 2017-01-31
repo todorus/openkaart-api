@@ -24,14 +24,22 @@ def execute(name, kind, childrenUuids=[]):
         if child is None:
             return None
         child_geometry = geojson.loads(child["geometry"])
-        # child_feature = Feature(geometry=child_geometry)
         child_shape = shape(child_geometry)
         children.append(child_shape)
-
-    #TODO merge child geometries
     geometry = cascaded_union(children)
     mapped_geometry = mapping(geometry)
-    #TODO create the region
-    #TODO return the region
 
-    return {"geometry": mapped_geometry, "name": name, "type": kind}
+    definition = {
+        "geometry": mapped_geometry,
+        "name": name,
+        "type": kind
+    }
+    node = region.create(graph, definition)
+
+    result = {
+        u"uuid": node["uuid"],
+        u"name": node["name"],
+        u"type": node["type"],
+        u"geometry": json.loads(node["geometry"])
+    }
+    return result

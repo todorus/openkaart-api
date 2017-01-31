@@ -34,7 +34,8 @@ def merge(graph, definition):
 
 def create(graph, definition):
     node = new(graph, definition)
-    return graph.create(node)
+    graph.create(node)
+    return node
 
 
 def createAll(graph, node_definitions):
