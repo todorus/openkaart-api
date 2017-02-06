@@ -1,10 +1,11 @@
 import lib.model.region as region
+import lib.model.relations as relations
 import lib.db.setup as db
 import json
 import geojson
-from geojson import Feature
 from shapely.geometry import shape, mapping
 from shapely.ops import cascaded_union
+from py2neo import Relationship
 
 
 def execute(name, kind, childrenUuids=[]):
@@ -35,6 +36,11 @@ def execute(name, kind, childrenUuids=[]):
         "type": kind
     }
     node = region.create(graph, definition)
+
+    for uuid in childrenUuids:
+        child = region.find(graph, {"uuid": uuid})
+        rel = Relationship(child, relations.BELONGS_TO, node)
+        graph.create(rel)
 
     result = {
         u"uuid": node["uuid"],

@@ -1,5 +1,5 @@
 from enum import Enum
-from py2neo import Graph, Node, Relationship, NodeSelector
+from py2neo import Node, Relationship, NodeSelector
 import json
 import uuid
 
@@ -110,6 +110,32 @@ def search(graph, query=None, limit=10, page=1):
             '''
         )
 
+    count = count.evaluate()
+    return result, count
+
+
+def children(graph, parentUuid, limit=10, page=1):
+    skip = (page - 1) * limit
+
+    result = graph.run(
+        '''
+        MATCH (c:Region)-[r:BELONGS_TO]->(p:Region)
+        WHERE p.uuid = {parentUuid}
+        RETURN c
+        ORDER BY LOWER(c.name), length(c.name) ASC
+        SKIP {skip}
+        LIMIT {limit}
+        ''',
+        parentUuid=parentUuid, skip=skip, limit=limit
+    )
+    count = graph.run(
+        '''
+        MATCH (c:Region)-[r:BELONGS_TO]->(p:Region)
+        WHERE p.uuid = {parentUuid}
+        RETURN count(c) as count
+        ''',
+        parentUuid=parentUuid
+    )
     count = count.evaluate()
     return result, count
 
