@@ -209,7 +209,7 @@ class CreateRegion(unittest.TestCase):
         req = requests.post(url, json=payload, headers=headers)
 
         # Then it should return an NOT FOUND status
-        self.assertEquals(404, req.status_code)
+        self.assertEquals(400, req.status_code)
 
         # And an empty body
         self.assertEquals("", req.text)
@@ -249,7 +249,6 @@ class CreateRegion(unittest.TestCase):
         # And the Region is created
         self.assertEquals(self.regionCount + 1, region.count(self.graph))
         # And the Region has the correct children
-        # TODO check
         new_region = region.find(self.graph, {"uuid": req.json()["uuid"]})
         children, childCount = region.children(self.graph, new_region["uuid"])
         self.assertEquals(2, childCount)

@@ -35,12 +35,18 @@ def execute(name, kind, childrenUuids=[]):
         "name": name,
         "type": kind
     }
-    node = region.create(graph, definition)
+    tx = graph.begin(autocommit=False)
+    node = region.create(tx, definition)
 
     for uuid in childrenUuids:
         child = region.find(graph, {"uuid": uuid})
+        if child is None:
+            tx.rollback()
+            return None
         rel = Relationship(child, relations.BELONGS_TO, node)
-        graph.create(rel)
+        tx.create(rel)
+
+    tx.commit()
 
     result = {
         u"uuid": node["uuid"],
