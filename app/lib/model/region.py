@@ -1,5 +1,5 @@
 from enum import Enum
-from py2neo import Graph, Node, Relationship, NodeSelector
+from py2neo import Node, Relationship, NodeSelector
 import json
 import uuid
 
@@ -34,7 +34,8 @@ def merge(graph, definition):
 
 def create(graph, definition):
     node = new(graph, definition)
-    return graph.create(node)
+    graph.create(node)
+    return node
 
 
 def createAll(graph, node_definitions):
@@ -111,6 +112,52 @@ def search(graph, query=None, limit=10, page=1):
 
     count = count.evaluate()
     return result, count
+
+
+def children(graph, parentUuid, limit=10, page=1):
+    skip = (page - 1) * limit
+
+    result = graph.run(
+        '''
+        MATCH (c:Region)-[r:BELONGS_TO]->(p:Region)
+        WHERE p.uuid = {parentUuid}
+        RETURN c
+        ORDER BY LOWER(c.name), length(c.name) ASC
+        SKIP {skip}
+        LIMIT {limit}
+        ''',
+        parentUuid=parentUuid, skip=skip, limit=limit
+    )
+    count = graph.run(
+        '''
+        MATCH (c:Region)-[r:BELONGS_TO]->(p:Region)
+        WHERE p.uuid = {parentUuid}
+        RETURN count(c) as count
+        ''',
+        parentUuid=parentUuid
+    )
+    count = count.evaluate()
+    return result, count
+
+
+def count(graph, query=None):
+    if query is not None:
+        count = graph.run(
+            '''
+            MATCH (n:Region)
+            WHERE n.name =~ {query}
+            RETURN count(n) as count
+            ''',
+            query=query
+        )
+    else:
+        count = graph.run(
+            '''
+            MATCH (n:Region)
+            RETURN count(n) as count
+            '''
+        )
+    return count.evaluate()
 
 
 def readCursor(cursor):
