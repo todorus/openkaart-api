@@ -2,17 +2,14 @@ from init import api
 from flask import jsonify, request
 from lib.authorization import login_required
 
-@api.route("/regions/<uuid>", methods=["GET"])
-def regions_read(uuid):
-    from regions.read import execute
-
-    # execute
-    result = execute(uuid)
-    if result is None:
-        return('', 404)
-
-    # present result as json
-    return jsonify(**result)
+@api.route("/regions/<uuid>", methods=["GET", "DELETE"])
+def region(uuid):
+    if request.method == 'GET':
+        return regions_read(uuid)
+    elif request.method == 'DELETE':
+        return regions_destroy(uuid)
+    else:
+        return '', 401
 
 
 @api.route("/regions", methods=["GET", "POST"])
@@ -23,6 +20,18 @@ def regions():
         return regions_create()
     else:
         return '', 401
+
+
+def regions_read(uuid):
+    from regions.read import execute
+
+    # execute
+    result = execute(uuid)
+    if result is None:
+        return ('', 404)
+
+    # present result as json
+    return jsonify(**result)
 
 
 def regions_index():
@@ -54,5 +63,18 @@ def regions_create():
 
     # present result as json
     if result is None:
-        return('', 400)
+        return ('', 400)
     return jsonify(**result)
+
+
+@login_required
+def regions_destroy(uuid):
+    from regions.destroy import execute
+
+    # extract parameters
+    result = execute({"uuid": uuid})
+
+    # present result as json
+    if result is None:
+        return ('', 404)
+    return ('', 200)
