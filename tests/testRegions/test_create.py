@@ -95,18 +95,6 @@ class CreateRegion(unittest.TestCase):
         self.graph.create(Relationship(region0, relations.BELONGS_TO, region2))
         self.graph.create(Relationship(region1, relations.BELONGS_TO, region2))
 
-        user_definitions = [
-            {u"username": "user1", u"password": u'password1', u"uuid": u'uuid1'},
-        ]
-        user.createAll(self.graph, user_definitions)
-
-    def login(self):
-        payload = {"username": "user1", "password": "password1"}
-        loginReq = requests.post("http://web/users/login", json=payload)
-        token = loginReq.headers["JWT"]
-        headers = {"Authorization": "Bearer %s" % token}
-        return headers
-
 
     def test_create_unauthorized(self):
         # And I NOT logged in
@@ -131,7 +119,7 @@ class CreateRegion(unittest.TestCase):
 
     def test_without_children(self):
         # And I am logged in
-        headers = self.login()
+        headers = utils.login(self.graph)
 
         # When I create a new Region without specifying children
         payload = {
@@ -153,7 +141,7 @@ class CreateRegion(unittest.TestCase):
 
     def test_without_name(self):
         # And I am logged in
-        headers = self.login()
+        headers = utils.login(self.graph)
 
         # When I create a new Region without specifying a name
         payload = {
@@ -174,7 +162,7 @@ class CreateRegion(unittest.TestCase):
 
     def test_invalid_name(self):
         # And I am logged in
-        headers = self.login()
+        headers = utils.login(self.graph)
 
         # When I create a new Region without specifying a name
         payload = {
@@ -196,7 +184,7 @@ class CreateRegion(unittest.TestCase):
 
     def test_unknown_child(self):
         # And I am logged in
-        headers = self.login()
+        headers = utils.login(self.graph)
 
         # When I create a new Region from several Regions
         uuid = u"1"
@@ -219,7 +207,7 @@ class CreateRegion(unittest.TestCase):
 
     def test_create_from_multiple(self):
         # And I am logged in
-        headers = self.login()
+        headers = utils.login(self.graph)
 
         # When I create a new Region from several Regions
         uuid = u"1"

@@ -47,6 +47,11 @@ def createAll(graph, node_definitions):
     transaction.commit()
 
 
+def delete(graph, definition):
+    node = find(graph, definition)
+    graph.delete(node)
+
+
 def exists(graph, definition):
     return len(match(graph, definition)) > 0
 
