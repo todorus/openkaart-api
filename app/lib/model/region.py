@@ -47,6 +47,17 @@ def createAll(graph, node_definitions):
     transaction.commit()
 
 
+def update(graph, uuid, definition):
+    node = merge(graph, {"uuid": uuid})
+    if node is None:
+        return None
+
+    __cleanDefinition(definition)
+    for key, value in definition.iteritems():
+        node[key] = value
+    node.push()
+
+
 def delete(graph, definition):
     node = find(graph, definition)
     graph.delete(node)
@@ -143,6 +154,16 @@ def children(graph, parentUuid, limit=10, page=1):
     )
     count = count.evaluate()
     return result, count
+
+
+def detachChildren(graph, uuid):
+    graph.run(
+        '''
+        MATCH (c:Region)-[r:BELONGS_TO]->(p:Region)
+        WHERE p.uuid = {parentUuid}
+        DESTROY r
+        '''
+    )
 
 
 def count(graph, query=None):

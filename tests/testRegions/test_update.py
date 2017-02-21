@@ -7,7 +7,7 @@ import tests.lib.utils as utils
 from py2neo import Relationship
 
 
-class CreateRegion(unittest.TestCase):
+class UpdateRegion(unittest.TestCase):
 
     # Given I have a a set of regions
 
