@@ -15,16 +15,16 @@ class FetchRegions(unittest.TestCase):
         utils.wipe_db(graph)
 
         definitions = [
-            {u"geometry": [[1, 1]], u"name": u'Maastricht', u"type": region.PLACE, u"uuid": u"1"},
-            {u"geometry": [[2, 1]], u"name": u'Maasdamn', u"type": region.PLACE, u"uuid": u"2"},
-            {u"geometry": [[3, 1]], u"name": u'bijdeMaas', u"type": region.MUNICIPALITY, u"uuid": u"3"},
-            {u"geometry": [[4, 1]], u"name": u'blub', u"type": region.MUNICIPALITY, u"uuid": u"4"},
-            {u"geometry": [[5, 1]], u"name": u'blob', u"type": region.MUNICIPALITY, u"uuid": u"5"},
-            {u"geometry": [[6, 1]], u"name": u'Maasland', u"type": region.MUNICIPALITY, u"uuid": u"6"},
-            {u"geometry": [[7, 1]], u"name": u'Overblaak', u"type": region.PLACE, u"uuid": u"7"},
-            {u"geometry": [[8, 1]], u"name": u'Ossdam', u"type": region.PLACE, u"uuid": u"8"},
-            {u"geometry": [[9, 1]], u"name": u'Oss', u"type": region.PLACE, u"uuid": u"9"},
-            {u"geometry": [[10, 1]], u"name": u'blib', u"type": region.MUNICIPALITY, u"uuid": u"10"}
+            {u"geometry": { u"type": u"Polygon", u"coordinates": [[1, 1]]}, u"name": u'Maastricht', u"type": region.PLACE, u"uuid": u"1"},
+            {u"geometry": { u"type": u"Polygon", u"coordinates": [[2, 1]]}, u"name": u'Maasdamn', u"type": region.PLACE, u"uuid": u"2"},
+            {u"geometry": { u"type": u"Polygon", u"coordinates": [[3, 1]]}, u"name": u'bijdeMaas', u"type": region.MUNICIPALITY, u"uuid": u"3"},
+            {u"geometry": { u"type": u"Polygon", u"coordinates": [[4, 1]]}, u"name": u'blub', u"type": region.MUNICIPALITY, u"uuid": u"4"},
+            {u"geometry": { u"type": u"Polygon", u"coordinates": [[5, 1]]}, u"name": u'blob', u"type": region.MUNICIPALITY, u"uuid": u"5"},
+            {u"geometry": { u"type": u"Polygon", u"coordinates": [[6, 1]]}, u"name": u'Maasland', u"type": region.MUNICIPALITY, u"uuid": u"6"},
+            {u"geometry": { u"type": u"Polygon", u"coordinates": [[7, 1]]}, u"name": u'Overblaak', u"type": region.PLACE, u"uuid": u"7"},
+            {u"geometry": { u"type": u"Polygon", u"coordinates": [[8, 1]]}, u"name": u'Ossdam', u"type": region.PLACE, u"uuid": u"8"},
+            {u"geometry": { u"type": u"Polygon", u"coordinates": [[9, 1]]}, u"name": u'Oss', u"type": region.PLACE, u"uuid": u"9"},
+            {u"geometry": { u"type": u"Polygon", u"coordinates": [[10, 1]]}, u"name": u'blib', u"type": region.MUNICIPALITY, u"uuid": u"10"}
         ]
         region.createAll(graph, definitions)
 
@@ -36,7 +36,7 @@ class FetchRegions(unittest.TestCase):
         req = requests.get(url)
 
         # Then it should return just the Region
-        expected = {u"geometry": [[3, 1]], u"name": u'bijdeMaas', u"type": region.MUNICIPALITY, u"uuid": u"3"}
+        expected = {u"geometry": { u"type": u"Polygon", u"coordinates": [[3, 1]]}, u"name": u'bijdeMaas', u"type": region.MUNICIPALITY, u"uuid": u"3"}
 
         self.assertEquals(200, req.status_code)
         self.assertEquals(expected, req.json())
@@ -49,7 +49,7 @@ class FetchRegions(unittest.TestCase):
         req = requests.get(url)
 
         # Then it should return just the Region
-        expected = {u"geometry": [[7, 1]], u"name": u'Overblaak', u"type": region.PLACE, u"uuid": u"7"}
+        expected = {u"geometry": { u"type": u"Polygon", u"coordinates": [[7, 1]]}, u"name": u'Overblaak', u"type": region.PLACE, u"uuid": u"7"}
 
         self.assertEquals(200, req.status_code)
         self.assertEquals(expected, req.json())

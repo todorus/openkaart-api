@@ -1,5 +1,6 @@
 from enum import Enum
 from py2neo import Node, Relationship, NodeSelector
+from py2neo.database import Transaction
 import json
 import uuid
 
@@ -48,14 +49,18 @@ def createAll(graph, node_definitions):
 
 
 def update(graph, uuid, definition):
-    node = merge(graph, {"uuid": uuid})
+    node = find(graph, {"uuid": uuid})
     if node is None:
         return None
 
+    definition["uuid"] = uuid
     __cleanDefinition(definition)
     for key, value in definition.iteritems():
         node[key] = value
-    node.push()
+    if isinstance(graph, Transaction):
+        graph = graph.graph
+    graph.push(node)
+    return node
 
 
 def delete(graph, definition):
