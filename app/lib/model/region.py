@@ -73,6 +73,10 @@ def exists(graph, definition):
 
 
 def match(graph, definition):
+    if "geometry" in definition:
+        definition = dict(definition)
+        del definition["geometry"]
+
     selector = NodeSelector(graph)
     result = list(selector.select("Region", **definition))
     return result
@@ -161,14 +165,15 @@ def children(graph, parentUuid, limit=10, page=1):
     return result, count
 
 
-def detachChildren(graph, uuid):
+def detachChildren(graph, parentUuid):
     graph.run(
         '''
         MATCH (c:Region)-[r:BELONGS_TO]->(p:Region)
         WHERE p.uuid = {parentUuid}
-        DESTROY r
-        '''
-    )
+        DELETE r
+        ''',
+        parentUuid=parentUuid
+    ).close()
 
 
 def count(graph, query=None):

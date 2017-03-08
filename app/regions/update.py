@@ -34,11 +34,12 @@ def execute(uuid, name=None, kind=None, childrenUuids=[]):
         changes["type"] = kind
     if hasChildren:
         children = []
-        for uuid in childrenUuids:
-            definition = {"uuid": uuid}
+        for childUuid in childrenUuids:
+            logging.warning("finding child1 %r" % {"uuid": childUuid})
+            definition = {"uuid": childUuid}
             child = region.find(graph, definition)
             if child is None:
-                logging.warning("child not found %s" % uuid)
+                logging.warning("child not found %s" % childUuid)
                 return None
             child_geometry = geojson.loads(child["geometry"])
             child_shape = shape(child_geometry)
@@ -49,6 +50,16 @@ def execute(uuid, name=None, kind=None, childrenUuids=[]):
 
     logging.warning("changes: %s" % json.dumps(changes))
 
+    # if hasChildren:
+    #     region.detachChildren(graph, uuid)
+    #
+    #     for childUuid in childrenUuids:
+    #         logging.warning("finding child2 %r" % {"uuid": childUuid})
+    #         child = region.find(graph, {"uuid": childUuid})
+    #         rel = Relationship(child, relations.BELONGS_TO, node)
+    #         graph.create(rel)
+    # node = region.update(graph, uuid, changes)
+
     tx = graph.begin(autocommit=False)
     if node is None:
         logging.warning("region not found %s" % uuid)
@@ -57,17 +68,22 @@ def execute(uuid, name=None, kind=None, childrenUuids=[]):
     if hasChildren:
         region.detachChildren(tx, uuid)
 
-        for uuid in childrenUuids:
-            child = region.find(tx, {"uuid": uuid})
+        for childUuid in childrenUuids:
+            logging.warning("finding child2 %r" % {"uuid": childUuid})
+            child = region.find(graph, {"uuid": childUuid})
             if child is None:
-                logging.warning("child not found %s" % uuid)
+                logging.warning("child not found %s" % childUuid)
                 tx.rollback()
                 return None
             rel = Relationship(child, relations.BELONGS_TO, node)
             tx.create(rel)
+            logging.warning("created child2 rel")
+    logging.warning("going to update %r" % changes)
     node = region.update(tx, uuid, changes)
-
+    logging.warning("updated")
     tx.commit()
+
+    logging.warning("committed!")
 
     node = region.find(graph, {"uuid": uuid})
     logging.warning("finished, returning %r" % node)
