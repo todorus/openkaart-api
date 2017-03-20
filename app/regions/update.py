@@ -60,30 +60,27 @@ def execute(uuid, name=None, kind=None, childrenUuids=[]):
     #         graph.create(rel)
     # node = region.update(graph, uuid, changes)
 
-    tx = graph.begin(autocommit=False)
+    # FIXME use a transaction
     if node is None:
         logging.warning("region not found %s" % uuid)
         return None
 
     if hasChildren:
-        region.detachChildren(tx, uuid)
+        region.detachChildren(graph, uuid)
 
         for childUuid in childrenUuids:
             logging.warning("finding child2 %r" % {"uuid": childUuid})
             child = region.find(graph, {"uuid": childUuid})
             if child is None:
                 logging.warning("child not found %s" % childUuid)
-                tx.rollback()
+                # FIXME rollback
                 return None
             rel = Relationship(child, relations.BELONGS_TO, node)
-            tx.create(rel)
+            graph.create(rel)
             logging.warning("created child2 rel")
     logging.warning("going to update %r" % changes)
-    node = region.update(tx, uuid, changes)
+    node = region.update(graph, uuid, changes)
     logging.warning("updated")
-    tx.commit()
-
-    logging.warning("committed!")
 
     node = region.find(graph, {"uuid": uuid})
     logging.warning("finished, returning %r" % node)
