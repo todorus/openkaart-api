@@ -44,3 +44,4 @@ services:
     volumes:
       - webroot:/webroot
       - certificates:/etc/letsencrypt
+    command: letsencrypt renew --force-renewal
