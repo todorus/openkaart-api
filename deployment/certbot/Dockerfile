@@ -11,7 +11,7 @@ RUN apt-get update
 RUN apt-get install -y letsencrypt
 
 VOLUME /webroot
-VOLUME /etc/letsencrypt/live
+VOLUME /etc/letsencrypt
 
 CMD letsencrypt certonly \
     --webroot -w /webroot \
