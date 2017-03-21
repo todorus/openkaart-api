@@ -19,5 +19,5 @@ CMD letsencrypt certonly \
     --renew-by-default \
     --text --non-interactive \
     --agree-tos --email todorus@todorus.com \
-    --staging && \
-    cp -r /etc/letsencrypt/api.waarregelikzorg.nl /etc/letsencrypt/live
+    --staging
+    #cp -r /etc/letsencrypt/api.waarregelikzorg.nl /etc/letsencrypt/live
