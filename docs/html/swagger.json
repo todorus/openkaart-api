@@ -64,8 +64,7 @@
                     "description": "the name of the Organization"
                 },
                 "contact_data": {
-                    "$ref": "#/definitions/ContactData",
-                    "description": "an object containing the general point of contact for the organization. Regional Locations can have their own contact data."
+                    "$ref": "#/definitions/ContactData"
                 },
                 "locations": {
                     "type": "array",
@@ -79,6 +78,9 @@
             "type": "object",
             "properties": {
                 "uuid": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 },
                 "contact_data": {
@@ -132,6 +134,13 @@
             "type": "string",
             "in": "path",
             "description": "unique identifier",
+            "required": true
+        },
+        "organization-uuid": {
+            "name": "uuid",
+            "type": "string",
+            "in": "path",
+            "description": "unique identifier of an Organization",
             "required": true
         }
     },
@@ -371,7 +380,7 @@
         },
         "/organizations": {
             "post": {
-                "description": "Creates a new Organization. It can also be used to create new Locations, belonging to this Organization.",
+                "description": "Creates a new Organization.",
                 "parameters": [
                     {
                         "$ref": "#/parameters/authorization"
@@ -388,12 +397,6 @@
                                 },
                                 "contact_data": {
                                     "$ref": "#/definitions/ContactData"
-                                },
-                                "locations": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/definitions/Location"
-                                    }
                                 }
                             }
                         }
@@ -483,13 +486,29 @@
                 }
             },
             "put": {
-                "description": "Updates an existing Organization. It can also be used to create new/remove existing Locations, belonging to this Organization.",
+                "description": "Updates an existing Organization.",
                 "parameters": [
                     {
                         "$ref": "#/parameters/authorization"
                     },
                     {
                         "$ref": "#/parameters/uuid"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "contact_data": {
+                                    "$ref": "#/definitions/ContactData"
+                                }
+                            }
+                        }
                     }
                 ],
                 "responses": {
@@ -508,7 +527,7 @@
                 }
             },
             "delete": {
-                "description": "Removes an existing Organization and any connections.",
+                "description": "Removes an existing Organization and its Locations.",
                 "parameters": [
                     {
                         "$ref": "#/parameters/authorization"
@@ -529,6 +548,198 @@
                     },
                     "404": {
                         "description": "Organization Not Found"
+                    }
+                }
+            }
+        },
+        "/organizations/{uuid}/locations": {
+            "post": {
+                "description": "Creates a new Location for the Organization with the matching uuid.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/authorization"
+                    },
+                    {
+                        "$ref": "#/parameters/organization-uuid"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "contact_data": {
+                                    "$ref": "#/definitions/ContactData"
+                                },
+                                "coordinates": {
+                                    "$ref": "#/definitions/Coordinates"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Location"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Organization not found"
+                    }
+                }
+            },
+            "get": {
+                "description": "List all the Locations for the specified Organization which satisfy the filter conditions. If no filter options are supplied, all the Locations for the Organization are returned.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/organization-uuid"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "the start of an Location name, case insensitive",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "what page to start at (default=1)",
+                        "required": false,
+                        "default": 1,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "the number of Locations per page (default=10)",
+                        "required": false,
+                        "default": 10,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "paging": {
+                                    "$ref": "#/definitions/Paging"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Location"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/locations/{uuid}": {
+            "get": {
+                "description": "Shows the Location for that uuid.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/uuid"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Location"
+                        }
+                    },
+                    "404": {
+                        "description": "Location Not Found"
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an existing Location.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/authorization"
+                    },
+                    {
+                        "$ref": "#/parameters/uuid"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "contact_data": {
+                                    "$ref": "#/definitions/ContactData"
+                                },
+                                "coordinates": {
+                                    "$ref": "#/definitions/Coordinates"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Location"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Location not found"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Removes an existing Location and any connections.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/authorization"
+                    },
+                    {
+                        "$ref": "#/parameters/uuid"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Location Not Found"
                     }
                 }
             }
