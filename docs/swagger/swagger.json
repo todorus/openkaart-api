@@ -161,7 +161,6 @@
     "paths": {
         "/users/login": {
             "post": {
-              "operationId": "login", 
                 "description": "Allows a client to login, using a username passward combination. The api will respond with a JWT when authentication is succesful.",
                 "tags": [
                     "login"

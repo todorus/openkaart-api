@@ -20,7 +20,16 @@ info:
   
   
   Do note that this does not reflect the structure of the data, but rather the ways in which it can be queried. Some endpoints may also offer additional filters, like querying by part of the name. Be sure to check the endpoints definition before assuming anything."
-
+tags:
+  - 
+    name: login
+  -
+    name: regions
+  - 
+    name: organizations
+  -
+    name: locations
+  
 definitions:
   Paging:
     type: "object"
@@ -125,6 +134,8 @@ paths:
     post:
       description: "Allows a client to login, using a username passward combination. The api will
 respond with a JWT when authentication is succesful."
+      tags:
+        - login
       parameters:
         -
           name: body
@@ -152,6 +163,8 @@ respond with a JWT when authentication is succesful."
   /regions:
     get:
       description: Lists all the regions which satisfy the filter conditions. If no filter options are supplied, all the Regions are returned.
+      tags:
+        - regions
       parameters:
         -
           name: q
@@ -187,6 +200,8 @@ respond with a JWT when authentication is succesful."
                   $ref: "#/definitions/Region"
     post:
       description: Creates a new Region, consisting out of multiple already defined Regions.
+      tags:
+        - regions
       parameters:
         - 
           $ref: "#/parameters/authorization"
@@ -218,6 +233,8 @@ respond with a JWT when authentication is succesful."
   /regions/{uuid}:
     get:
       description: Shows the Region for that uuid.
+      tags:
+        - regions
       parameters:
         -
           $ref: "#/parameters/uuid"
@@ -230,6 +247,8 @@ respond with a JWT when authentication is succesful."
           description: Region Not Found
     put:
       description: Updates an existing Region. All the Regions properties are optional, but at least one must be given within the body.
+      tags:
+        - regions
       parameters:
         - 
           $ref: "#/parameters/authorization"
@@ -265,6 +284,8 @@ respond with a JWT when authentication is succesful."
           description: Region Not Found
     delete:
       description: Removes an existing Region and any connections.
+      tags:
+        - regions
       parameters:
         - 
           $ref: "#/parameters/authorization"
@@ -282,6 +303,8 @@ respond with a JWT when authentication is succesful."
   /organizations:
     post:
       description: Creates a new Organization.
+      tags:
+        - organizations
       parameters:
         - 
           $ref: "#/parameters/authorization"
@@ -307,6 +330,8 @@ respond with a JWT when authentication is succesful."
           description: Unauthorized
     get:
       description: List all the Organizations which satisfy the filter conditions. If no filter options are supplied, all the Organizations are returned.
+      tags:
+        - organizations
       parameters:
         -
           name: q
@@ -343,6 +368,8 @@ respond with a JWT when authentication is succesful."
   /organizations/{uuid}:
     get:
       description: Shows the Organization for that uuid.
+      tags:
+        - organizations
       parameters:
         -
           $ref: "#/parameters/uuid"
@@ -355,6 +382,8 @@ respond with a JWT when authentication is succesful."
           description: Organization Not Found
     put:
       description: Updates an existing Organization.
+      tags:
+        - organizations
       parameters:
         - 
           $ref: "#/parameters/authorization"
@@ -382,6 +411,8 @@ respond with a JWT when authentication is succesful."
           description: Organization not found
     delete:
       description: Removes an existing Organization and its Locations.
+      tags:
+        - organizations
       parameters:
         - 
           $ref: "#/parameters/authorization"
@@ -399,6 +430,9 @@ respond with a JWT when authentication is succesful."
   /organizations/{uuid}/locations:
     post:
       description: Creates a new Location for the Organization with the matching uuid.
+      tags:
+        - organizations
+        - locations
       parameters:
         - 
           $ref: "#/parameters/authorization"
@@ -430,6 +464,9 @@ respond with a JWT when authentication is succesful."
           description: Organization not found
     get:
       description: List all the Locations for the specified Organization which satisfy the filter conditions. If no filter options are supplied, all the Locations for the Organization are returned.
+      tags:
+        - organizations
+        - locations
       parameters:
         -
             $ref: "#/parameters/organization-uuid"
@@ -468,6 +505,8 @@ respond with a JWT when authentication is succesful."
   /locations/{uuid}:
     get:
       description: Shows the Location for that uuid.
+      tags:
+        - locations
       parameters:
         -
           $ref: "#/parameters/uuid"
@@ -480,6 +519,8 @@ respond with a JWT when authentication is succesful."
           description: Location Not Found
     put:
       description: Updates an existing Location.
+      tags:
+        - locations
       parameters:
         - 
           $ref: "#/parameters/authorization"
@@ -511,6 +552,8 @@ respond with a JWT when authentication is succesful."
           description: Location not found
     delete:
       description: Removes an existing Location and any connections.
+      tags:
+        - locations
       parameters:
         - 
           $ref: "#/parameters/authorization"
