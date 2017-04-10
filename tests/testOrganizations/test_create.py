@@ -123,7 +123,6 @@ class CreateOrganization(unittest.TestCase):
         req = requests.post(url, json=payload, headers=headers)
 
         # Then it should return an OK status
-
         self.assertEquals(200, req.status_code)
 
         # And the newly created Organization

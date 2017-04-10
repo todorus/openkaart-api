@@ -4,6 +4,45 @@ from py2neo.database import Transaction
 import uuid
 
 
+class ContactData():
+
+    PHONE = "phone"
+    ADDRESS = "address"
+    EMAIL = "email"
+
+    def __init__(self, phone=None, email=None, address=None):
+        self.phone = phone
+        self.email = email
+        self.address = address
+
+    def to_d(self):
+        d = {}
+        if self.phone is not None:
+            d[ContactData.PHONE] = self.phone
+        if self.email is not None:
+            d[ContactData.EMAIL] = self.email
+        if self.address is not None:
+            d[ContactData.ADDRESS] = self.address
+
+        return d
+
+
+class Organization():
+
+    NAME = "name"
+    CONTACT_DATA = "contact_data"
+
+    def __init__(self, name=None, **contact_data_args):
+        self.name = name
+        self.contact_data = ContactData(**contact_data_args)
+
+    def to_d(self):
+        return {
+            Organization.NAME: self.name,
+            Organization.CONTACT_DATA: self.contact_data.to_d()
+        }
+
+
 def __cleanDefinition(definition):
     if 'uuid' not in definition:
         definition["uuid"] = str(uuid.uuid1())
