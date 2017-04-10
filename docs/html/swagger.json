@@ -161,7 +161,6 @@
     "paths": {
         "/users/login": {
             "post": {
-              "operationId": "login", 
                 "description": "Allows a client to login, using a username passward combination. The api will respond with a JWT when authentication is succesful.",
                 "tags": [
                     "login"
@@ -173,6 +172,10 @@
                         "required": true,
                         "schema": {
                             "type": "object",
+                            "required": [
+                                "username",
+                                "password"
+                            ],
                             "properties": {
                                 "username": {
                                     "type": "string"
@@ -270,6 +273,11 @@
                         "required": true,
                         "schema": {
                             "type": "object",
+                            "required": [
+                                "name",
+                                "type",
+                                "children"
+                            ],
                             "properties": {
                                 "name": {
                                     "type": "string"
@@ -427,6 +435,9 @@
                         "required": true,
                         "schema": {
                             "type": "object",
+                            "required": [
+                                "name"
+                            ],
                             "properties": {
                                 "name": {
                                     "type": "string"
@@ -620,6 +631,9 @@
                         "required": true,
                         "schema": {
                             "type": "object",
+                            "required": [
+                                "name"
+                            ],
                             "properties": {
                                 "name": {
                                     "type": "string"

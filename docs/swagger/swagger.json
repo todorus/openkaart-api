@@ -172,6 +172,10 @@
                         "required": true,
                         "schema": {
                             "type": "object",
+                            "required": [
+                                "username",
+                                "password"
+                            ],
                             "properties": {
                                 "username": {
                                     "type": "string"
@@ -269,6 +273,11 @@
                         "required": true,
                         "schema": {
                             "type": "object",
+                            "required": [
+                                "name",
+                                "type",
+                                "children"
+                            ],
                             "properties": {
                                 "name": {
                                     "type": "string"
@@ -426,6 +435,9 @@
                         "required": true,
                         "schema": {
                             "type": "object",
+                            "required": [
+                                "name"
+                            ],
                             "properties": {
                                 "name": {
                                     "type": "string"
@@ -619,6 +631,9 @@
                         "required": true,
                         "schema": {
                             "type": "object",
+                            "required": [
+                                "name"
+                            ],
                             "properties": {
                                 "name": {
                                     "type": "string"

@@ -143,6 +143,7 @@ respond with a JWT when authentication is succesful."
           required: true
           schema:
             type: object
+            required: ["username", "password"]
             properties:
               username: 
                 type: string
@@ -211,6 +212,7 @@ respond with a JWT when authentication is succesful."
           required: true
           schema:
             type: object
+            required: ["name", "type", "children"]
             properties:
               name:
                 type: string
@@ -314,6 +316,7 @@ respond with a JWT when authentication is succesful."
           required: true
           schema:
             type: object
+            required: ["name"]
             properties:
               name:
                 type: string
@@ -444,6 +447,7 @@ respond with a JWT when authentication is succesful."
           required: true
           schema:
             type: object
+            required: ["name"]
             properties:
               name:
                 type: string
