@@ -240,4 +240,3 @@ class CreateRegion(unittest.TestCase):
         new_region = region.find(self.graph, {"uuid": req.json()["uuid"]})
         children, childCount = region.children(self.graph, new_region["uuid"])
         self.assertEquals(2, childCount)
-        print(children)

@@ -16,6 +16,10 @@ You can run the develop script to get you started. The script will build a Docke
 ```
 This will start a webserver and echo the hostname and port to the console. It will run app/start_server.py and do a hot reload on code changes within the /app folder. The exception is start_server.py: if you change this file you will need to restart the development environment.
 
+Documentation
+-------------
+Documentation of the api is created by using an OpenApi definition. It can be viewed by running a development/production server and navigating to ```localhost/docs```.
+
 Testing
 -------
 There is also a script to run the tests.
